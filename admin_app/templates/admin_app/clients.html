@@ -1,0 +1,26 @@
+{% extends "admin_app/base.html" %}
+
+{% block content %}
+
+<h1>Clients</h1>
+
+<div>
+    <table>
+        <thead>
+            <td>Username</td>
+            <td>Edit Details</td>
+            <td>Edit Password</td>
+        </thead>
+    {% for user in users %}
+    
+        <tr>
+            <td>{{ user.username }}<td>
+            <td><a href="{{ user.id }}">Edit</a></td>
+            <td><a href="password/{{ user.id }}">Edit</a></td>
+        </tr>
+
+    {% endfor %}
+    </table>
+</div>
+
+{% endblock content %}

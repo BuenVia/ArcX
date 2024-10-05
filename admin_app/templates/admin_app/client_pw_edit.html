@@ -1,0 +1,19 @@
+{% extends "admin_app/base.html" %}
+
+{% block content %}
+
+<h3>Edit Client Password</h3>
+<h4>{{ user.id }}: {{ user.username }}</h4>
+
+<form class="client__form" method="POST" action="">
+    {% csrf_token %}
+    <h4>Change Password</h4>
+    <label class="form-label">Password</label>
+    <input class="form-control" name="password" />
+    <label class="form-label">Repeat Password</label>
+    <input class="form-control" name="repeat_password"/>
+    <input type="submit" value="Save" />
+    <a href="{% url "clients" %}">Back</a>
+</form>
+
+{% endblock content %}
