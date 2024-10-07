@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
 from django.contrib import messages
-from .forms import UserRegistrationForm
+from .forms import UserRegistrationForm, AddUserForm
+from client_app.models import ClientUserPDF
 
 def admin_login(request):
     if request.method == 'POST':
@@ -74,3 +75,30 @@ def client_pw_edit(request, id):
 
         return render(request, 'admin_app/client_pw_edit.html', {'form': form})
     return redirect('')  # If the user is not a superuser, redirect to home
+
+@login_required
+def client_new(request):
+    if request.user.is_superuser:
+        if request.method == 'POST':
+            form = AddUserForm(request.POST)
+            if form.is_valid():
+                # Create the user object without saving it yet
+                user = form.save(commit=False)
+
+                # Set the password using set_password() to hash it securely
+                password = form.cleaned_data['password']
+                user.set_password(password)
+
+                # Save the user object with the password
+                user.save()
+
+                return redirect('clients')  # Redirect after successful user creation
+        else:
+            form = AddUserForm()
+
+        return render(request, 'admin_app/client_new.html', {'form': form})
+    
+def document_view(request):
+    user_pdfs = ClientUserPDF.objects.all()
+    print(user_pdfs)
+    return render(request, 'admin_app/documents.html', {"user_pdfs": user_pdfs})

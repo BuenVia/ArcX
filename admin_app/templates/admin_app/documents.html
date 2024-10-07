@@ -1,0 +1,16 @@
+{% extends "admin_app/base.html" %}
+
+{% block content %}
+
+<h1>Documents</h1>
+
+{% for pdf in user_pdfs %}
+    <li>
+        <a href="{{ pdf.pdf.url }}" download>{{ pdf.user.username }}'s PDF</a> (Uploaded on {{ pdf.uploaded_at }})
+    </li>
+    {% empty %}
+    <li>No PDFs available</li>
+{% endfor %}
+
+{% endblock content %}
+
