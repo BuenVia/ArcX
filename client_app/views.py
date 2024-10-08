@@ -47,3 +47,8 @@ def upload_pdf(request):
         form = ClientUserPDFForm(instance=user_pdf)
 
     return render(request, 'client_app/upload_pdf.html', {'form': form})
+
+
+def user_pdfs(request):
+    pdfs = ClientUserPDF.objects.filter(user=request.user)  # Fetch all PDFs for the logged-in user
+    return render(request, 'client_app/documents.html', {'pdfs': pdfs})
