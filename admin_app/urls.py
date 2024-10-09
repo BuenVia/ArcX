@@ -9,5 +9,6 @@ urlpatterns = [
     path('clients/new', views.client_new, name='client_new'),
     path('clients/<id>', views.client_edit, name='client_edit'),
     path('clients/password/<id>', views.client_pw_edit, name='client_pw_edit'),
-    path('documents/', views.document_view, name='documents')
+    path('documents/', views.document_view, name='admin_documents'),
+    path('delete_pdf/<int:pdf_id>/', views.delete_pdf, name='admin_delete_pdf'),
 ]

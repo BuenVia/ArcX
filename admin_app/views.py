@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from .forms import UserRegistrationForm, AddUserForm
 from client_app.models import ClientUserPDF
+import os
+from django.conf import settings
 
 def admin_login(request):
     if request.method == 'POST':
@@ -97,8 +99,29 @@ def client_new(request):
             form = AddUserForm()
 
         return render(request, 'admin_app/client_new.html', {'form': form})
-    
+
+@login_required
 def document_view(request):
-    user_pdfs = ClientUserPDF.objects.all()
-    print(user_pdfs)
-    return render(request, 'admin_app/documents.html', {"user_pdfs": user_pdfs})
+    if request.user.is_superuser:
+        user_pdfs = ClientUserPDF.objects.all()
+        return render(request, 'admin_app/documents.html', {"user_pdfs": user_pdfs})
+    
+def delete_pdf(request, pdf_id):
+    # Find the PDF object by its ID
+    pdf = get_object_or_404(ClientUserPDF, id=pdf_id)
+    print(pdf)
+    # Delete the file from the file system
+    if pdf.pdf:
+        print(pdf.pdf)
+        # Construct the full file path
+        file_path = os.path.join(settings.MEDIA_ROOT, str(pdf.pdf))
+        # Check if the file exists before attempting to delete it
+        print(file_path)
+        if os.path.exists(file_path):
+            os.remove(file_path)
+
+    # Delete the record from the database
+    pdf.delete()
+
+    # Redirect to some page after deletion (e.g., PDF list or success page)
+    return redirect('admin_documents')  # Replace with your desired redirect

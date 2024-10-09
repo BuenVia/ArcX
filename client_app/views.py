@@ -34,7 +34,8 @@ def client_dashboard(request):
 @login_required
 def upload_pdf(request):
     # Check if the user already has a PDF associated with their account
-    user_pdf = ClientUserPDF.objects.filter(user=request.user).first()
+    # user_pdf = ClientUserPDF.objects.filter(user=request.user).first()
+    user_pdf = ClientUserPDF()
 
     if request.method == 'POST':
         form = ClientUserPDFForm(request.POST, request.FILES, instance=user_pdf)

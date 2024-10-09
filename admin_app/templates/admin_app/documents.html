@@ -4,13 +4,17 @@
 
 <h1>Documents</h1>
 
-{% for pdf in user_pdfs %}
-    <li>
-        <a href="{{ pdf.pdf.url }}" download>{{ pdf.user.username }}'s PDF</a> (Uploaded on {{ pdf.uploaded_at }})
-    </li>
+<ul>
+    {% for pdf in user_pdfs %}
+        <li>
+            <a href="{{ pdf.pdf.url }}" download>{{ pdf.pdf.name }}</a>
+            (Uploaded on {{ pdf.uploaded_at }})
+            <a href="{% url 'admin_delete_pdf' pdf.id %}" class="delete-button">Delete</a>
+        </li>
     {% empty %}
-    <li>No PDFs available</li>
-{% endfor %}
+        <li>No PDFs available</li>
+    {% endfor %}
+</ul>
 
 {% endblock content %}
 
