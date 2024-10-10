@@ -2,11 +2,6 @@
 
 {% block content %}
 
-<div>
-    <a href="{% url "upload_pdf" %}">Upload PDF</a>
-</div>
+<h1>Client Dashboard</h1>
 
-<div>
-    <p>Uploaded PDF: <a href="{{ request.user.userpdf.pdf.url }}">Download</a></p>
-</div>
 {% endblock content %}

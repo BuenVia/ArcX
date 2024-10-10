@@ -13,4 +13,15 @@
         <li>No PDFs available</li>
     {% endfor %}
 </ul>
+
+
+
+<div>
+    <a href="{% url "upload_pdf" %}">Upload PDF</a>
+</div>
+
+{% comment %} <div>
+    <p>Uploaded PDF: <a href="{{ request.user.userpdf.pdf.url }}">Download</a></p>
+</div> {% endcomment %}
+
 {% endblock content %}

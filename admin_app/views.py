@@ -101,6 +101,12 @@ def client_new(request):
         return render(request, 'admin_app/client_new.html', {'form': form})
 
 @login_required
+def client_document_view(request, id):
+    if request.user.is_superuser:
+        user_pdfs = ClientUserPDF.objects.filter(user=id)
+        return render(request, 'admin_app/client_docs.html', {"user_pdfs": user_pdfs})
+
+@login_required
 def document_view(request):
     if request.user.is_superuser:
         user_pdfs = ClientUserPDF.objects.all()

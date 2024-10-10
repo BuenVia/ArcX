@@ -1,18 +1,39 @@
-{% if messages %}
-    <ul>
-        {% for message in messages %}
-            <li>{{ message }}</li>
-        {% endfor %}
-    </ul>
-{% endif %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'client_app/css/client_login.css' %} ">
+    <title>Client</title>
+</head>
+<body>
+    
+    <div class="container">
 
-<form method="POST">
-    {% csrf_token %}
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" required>
+        <h1>ArcX</h1>
+        
+        <form method="POST" class="client__login__form">
+            {% csrf_token %}
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+            
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            
+            {% if messages %}
+    
+            <ul>
+                {% for message in messages %}
+                <li class="client__login__message">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        
+            {% endif %}
 
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required>
+            <button type="submit">Login</button>
+        </form>
+    </div>
 
-    <button type="submit">Login</button>
-</form>
+</body>
+</html>

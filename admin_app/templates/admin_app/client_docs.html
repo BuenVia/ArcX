@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<h1>Documents</h1>
+{% for pdf in user_pdfs %}
 
 <ul>
     {% for pdf in user_pdfs %}
@@ -17,5 +17,6 @@
     {% endfor %}
 </ul>
 
-{% endblock content %}
+{% endfor %}
 
+{% endblock content %}
