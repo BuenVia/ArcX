@@ -15,3 +15,13 @@ body {
     font-family: 'Courier New', Courier, monospace;
 
 }
+
+.document__list {
+
+}
+
+.document__list__el {
+    padding: 0 .5em;
+    border-bottom: 1px solid #777;
+    list-style: none;
+}

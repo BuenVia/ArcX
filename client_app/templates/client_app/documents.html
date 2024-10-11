@@ -4,13 +4,13 @@
 {% block content %}
 
 <h1>{{ request.user.username }}'s Uploaded PDFs</h1>
-<ul>
+<ul class="document__list">
     {% for pdf in pdfs %}
-        <li>
+        <li class="document__list__el">
             <a href="{{ pdf.pdf.url }}" download>{{ pdf.pdf.name }}</a> (Uploaded on {{ pdf.uploaded_at }})
         </li>
     {% empty %}
-        <li>No PDFs available</li>
+        <li class="document__list__el">No PDFs available</li>
     {% endfor %}
 </ul>
 
