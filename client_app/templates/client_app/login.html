@@ -11,28 +11,40 @@
     
     <div class="container">
 
-        <h1>ArcX</h1>
-        
-        <form method="POST" class="client__login__form">
-            {% csrf_token %}
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
-            
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-            
-            {% if messages %}
-    
-            <ul>
-                {% for message in messages %}
-                <li class="client__login__message">{{ message }}</li>
-                {% endfor %}
-            </ul>
-        
-            {% endif %}
+        <div class="client__login__card">
 
-            <button type="submit">Login</button>
-        </form>
+            <div class="client__login__card__top">
+                <h1>ARC Support Services</h1>
+            </div>
+
+            <div class="client__login__card__mid">
+                <form method="POST" class="client__login__form">
+                    {% csrf_token %}
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" required>
+                    
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+                    
+                    {% if messages %}
+                    
+                    <ul>
+                        {% for message in messages %}
+                        <li class="client__login__message">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                    
+                    {% endif %}
+                    
+                    <button type="submit">Login</button>
+                </form>
+            </div>
+            
+            <div class="client__login__card__btm">
+                &#169; ARC Support Services | All rights reserved
+            </div>
+            
+        </div>
     </div>
 
 </body>
