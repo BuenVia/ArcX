@@ -4,10 +4,18 @@
 {% block content %}
 
 <h1>{{ request.user.username }}'s Uploaded PDFs</h1>
-<ul>
+<ul class="client__docs__list">
     {% for pdf in pdfs %}
-        <li>
-            <a href="{{ pdf.pdf.url }}" download>{{ pdf.pdf.name }}</a> (Uploaded on {{ pdf.uploaded_at }})
+        <li class="client__docs__list__el">
+            <div class="card text-bg-dark mb-3">
+                <div class="card-header">
+                    {{ pdf.pdf.name }}
+                </div>
+                <div class="card-body">
+                    <p><a href="{{ pdf.pdf.url }}" class="btn btn-warning" download>Download</a></p>
+                    <p>(Uploaded on {{ pdf.uploaded_at }})</p>
+                </div>
+            </div>
         </li>
     {% empty %}
         <li>No PDFs available</li>
@@ -17,11 +25,8 @@
 
 
 <div>
-    <a href="{% url "upload_pdf" %}">Upload PDF</a>
+    <a href="{% url "upload_pdf" %}" class="btn btn-dark">Upload PDF</a>
 </div>
 
-{% comment %} <div>
-    <p>Uploaded PDF: <a href="{{ request.user.userpdf.pdf.url }}">Download</a></p>
-</div> {% endcomment %}
 
 {% endblock content %}

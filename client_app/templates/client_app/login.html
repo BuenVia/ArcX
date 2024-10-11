@@ -20,11 +20,11 @@
             <div class="client__login__card__mid">
                 <form method="POST" class="client__login__form">
                     {% csrf_token %}
-                    <label for="username">Username:</label>
-                    <input type="text" id="username" name="username" required>
+                    <!-- <label for="username">Username:</label> -->
+                    <input type="text" id="username" name="username" placeholder="Username" required>
                     
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" name="password" required>
+                    <!-- <label for="password">Password:</label> -->
+                    <input type="password" id="password" name="password" placeholder="Password" required>
                     
                     {% if messages %}
                     
@@ -41,11 +41,16 @@
             </div>
             
             <div class="client__login__card__btm">
-                &#169; ARC Support Services | All rights reserved
+                &#169; <span id="date"></span> ARC Support Services | All rights reserved
             </div>
             
         </div>
     </div>
+
+    <script>
+        const date = new Date()
+        document.getElementById("date").innerText = date.getFullYear();
+    </script>
 
 </body>
 </html>

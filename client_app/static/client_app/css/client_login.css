@@ -51,6 +51,7 @@ body {
 .client__login__card__btm {
     width: 100%;
     padding: 1em;
+    font-size: 12px;
 }
 
 .client__login__form {
@@ -60,17 +61,24 @@ body {
     justify-content: center;
 }
 
+.client__login__form label {
+    text-align: left;
+}
+
 .client__login__form input {
-    margin: .5em 0;
-    padding: .25em;
+    width: 75%;
+    margin-bottom: 1em;
+    padding: .75em;
     outline: none;
     border: 1px solid rgba(145, 149, 153, 0.7);
     border-radius: 3px;
+    background-color: #444;
+    color: #eee;
 }
 
 .client__login__form button {
     margin: .5em 0;
-    padding: .5em;
+    padding: .75em;
     background-color: #222;
     color: #eee;
     border: 1px solid rgba(145, 149, 153, 0.7);

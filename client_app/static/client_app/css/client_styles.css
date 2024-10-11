@@ -6,7 +6,8 @@
 
 body {
     min-height: 100vh;
-    background-color: #eee;
+    background-color: #313131;
+    color: #eee;
 }
 
 .container {
@@ -15,3 +16,9 @@ body {
     font-family: 'Courier New', Courier, monospace;
 
 }
+
+.logo {
+    color: rgb(228, 228, 28);
+    font-size: 18px;
+}
+
