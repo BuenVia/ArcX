@@ -99,3 +99,8 @@ body {
     list-style: none;
     border-radius: 5px;
 }
+
+.dateEl {
+    padding: .5em;
+    color: rgb(228, 228, 28);
+}
