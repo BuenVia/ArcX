@@ -6,7 +6,7 @@
 
 body {
     min-height: 100vh;
-    background-color: #eee;
+    background-color: #313131;
 }
 
 .container {
@@ -18,38 +18,76 @@ body {
     font-family: 'Courier New', Courier, monospace;
 }
 
-.client__login__form {
+.client__login__card {
     margin: auto;
+    margin-top: 200px;
+    width: 600px;
     padding: 2em;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 600px;
-    border: 1px solid rgba(100, 100, 100, 0.5);
+    background-color: #3a3a3a;
+    color: #eee;
+    /* border: 1px solid rgba(100, 100, 100, 0.5); */
     border-radius: 10px;
-    box-shadow: rgba(145, 149, 153, 0.2) 0px 8px 24px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, .1), 0 6px 20px rgba(0, 0, 0, .1)
 }
 
-.login__form label {}
+.client__login__card__top {
+    width: 100%;
+    padding: 1em;
+    border-bottom: 1px solid #bbb;
+    color: rgb(228, 228, 28);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.client__login__card__mid {
+    width: 100%;
+    padding: 1em;
+    border-bottom: 1px solid #bbb;
+}
+
+.client__login__card__btm {
+    width: 100%;
+    padding: 1em;
+    font-size: 12px;
+}
+
+.client__login__form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.client__login__form label {
+    text-align: left;
+}
 
 .client__login__form input {
-    margin: .5em 0;
-    padding: .25em;
+    width: 75%;
+    margin-bottom: 1em;
+    padding: .75em;
     outline: none;
     border: 1px solid rgba(145, 149, 153, 0.7);
     border-radius: 3px;
+    background-color: #444;
+    color: #eee;
 }
 
 .client__login__form button {
     margin: .5em 0;
-    padding: .5em;
+    padding: .75em;
+    background-color: #222;
+    color: #eee;
     border: 1px solid rgba(145, 149, 153, 0.7);
+    border-radius: 5px;
     cursor: pointer;
 }
 
 .client__login__form button:hover {
-    background-color: #fff;
+    background-color: #363636;
     border: 1px solid rgba(145, 149, 153, 0.7);
 }
 
@@ -60,4 +98,9 @@ body {
     color: #eee;
     list-style: none;
     border-radius: 5px;
+}
+
+.dateEl {
+    padding: .5em;
+    color: rgb(228, 228, 28);
 }

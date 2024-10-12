@@ -11,29 +11,59 @@
     
     <div class="container">
 
-        <h1>ArcX</h1>
-        
-        <form method="POST" class="client__login__form">
-            {% csrf_token %}
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
-            
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-            
-            {% if messages %}
-    
-            <ul>
-                {% for message in messages %}
-                <li class="client__login__message">{{ message }}</li>
-                {% endfor %}
-            </ul>
-        
-            {% endif %}
+        <div class="client__login__card">
 
-            <button type="submit">Login</button>
-        </form>
+            <div class="client__login__card__top">
+                <h1>ARC Support Services</h1>
+            </div>
+
+            <div class="client__login__card__mid">
+                <p class="dateEl" id="fullDate"></p>
+                <form method="POST" class="client__login__form">
+                    {% csrf_token %}
+                    <!-- <label for="username">Username:</label> -->
+                    <input type="text" id="username" name="username" placeholder="Username" required>
+                    
+                    <!-- <label for="password">Password:</label> -->
+                    <input type="password" id="password" name="password" placeholder="Password" required>
+                    
+                    {% if messages %}
+                    
+                    <ul>
+                        {% for message in messages %}
+                        <li class="client__login__message">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                    
+                    {% endif %}
+                    
+                    <button type="submit">Login</button>
+                </form>
+            </div>
+            
+            <div class="client__login__card__btm">
+                &#169; <span id="date"></span> ARC Support Services | All rights reserved
+            </div>
+            
+        </div>
     </div>
+
+    <script>
+
+        const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+        const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+        
+        const date = new Date();
+        const day = date.getDay();
+        const dayDate = date.getDate()
+        const month = date.getMonth();
+        const year = date.getFullYear();
+        const hours = date.getHours();
+        const minutes = date.getMinutes();
+        
+        document.getElementById("fullDate").innerText = `${days[day - 1]} ${day} ${months[month]} ${year} ${hours}:${minutes}`;
+        document.getElementById("date").innerText = year;
+    </script>
 
 </body>
 </html>

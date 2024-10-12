@@ -6,7 +6,8 @@
 
 body {
     min-height: 100vh;
-    background-color: #eee;
+    background-color: #313131;
+    color: #eee;
 }
 
 .container {
@@ -16,12 +17,8 @@ body {
 
 }
 
-.document__list {
-
+.logo {
+    color: rgb(228, 228, 28);
+    font-size: 18px;
 }
 
-.document__list__el {
-    padding: 0 .5em;
-    border-bottom: 1px solid #777;
-    list-style: none;
-}
