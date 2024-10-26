@@ -4,7 +4,8 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
 from django.contrib import messages
 from .forms import UserRegistrationForm, AddUserForm
-from client_app.models import ClientUserPDF
+# from client_app.models import ClientUserPDF
+from .models import DocumentClient
 import os
 from django.conf import settings
 
@@ -111,18 +112,18 @@ def client_new(request):
 @login_required
 def client_document_view(request, id):
     if request.user.is_superuser:
-        user_pdfs = ClientUserPDF.objects.filter(user=id)
+        user_pdfs = DocumentClient.objects.filter(user=id)
         return render(request, 'admin_app/client_docs.html', {"user_pdfs": user_pdfs})
 
 @login_required
 def document_view(request):
     if request.user.is_superuser:
-        user_pdfs = ClientUserPDF.objects.all()
+        user_pdfs = DocumentClient.objects.all()
         return render(request, 'admin_app/documents.html', {"user_pdfs": user_pdfs})
     
 def delete_pdf(request, pdf_id):
     # Find the PDF object by its ID
-    pdf = get_object_or_404(ClientUserPDF, id=pdf_id)
+    pdf = get_object_or_404(DocumentClient, id=pdf_id)
     print(pdf)
     # Delete the file from the file system
     if pdf.pdf:

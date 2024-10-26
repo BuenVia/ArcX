@@ -3,30 +3,33 @@
 
 {% block content %}
 
-<h1>{{ request.user.username }}'s Uploaded PDFs</h1>
-<ul class="client__docs__list">
-    {% for pdf in pdfs %}
-        <li class="client__docs__list__el">
-            <div class="card text-bg-dark mb-3">
-                <div class="card-header">
-                    {{ pdf.pdf.name }}
-                </div>
-                <div class="card-body">
-                    <p><a href="{{ pdf.pdf.url }}" class="btn btn-warning" download>Download</a></p>
-                    <p>(Uploaded on {{ pdf.uploaded_at }})</p>
-                </div>
+<h1>Document Review</h1>
+
+    {% for doc in user_documents %}
+
+        <div class="card text-bg-dark mb-3" style="width: 100%;">
+            <div class="card-header">
+                <span>{{ doc.document.title }}</span>
             </div>
-        </li>
-    {% empty %}
-        <li class="document__list__el">No PDFs available</li>
+                <span>{{ doc.uploaded }}</span>
+                {% if doc.uploaded %}
+                <span>{{ doc.upload_date }}</span>
+                {% else %}
+                <span>NA</span>
+                {% endif %}
+                <span>
+                    {% if not doc.uploaded %}
+                    <a href="{% url 'upload_document' doc.document.id %}">Upload</a>
+                    {% else %}
+                    Uploaded
+                    {% endif %}
+                </span>
+
+        </div>
+
     {% endfor %}
-</ul>
 
 
-
-<div>
-    <a href="{% url "upload_pdf" %}" class="btn btn-dark">Upload PDF</a>
-</div>
 
 
 {% endblock content %}

@@ -4,12 +4,43 @@
 
 <h1>Client Dashboard</h1>
 
-<div class="card text-bg-dark mb-3" style="max-width: 18rem;">
-    <div class="card-header">Header</div>
+<div class="row">
+
+<div class="col">
+  <div class="card text-bg-dark mb-3" style="max-width: 18rem;">
+      <div class="card-header">Process Manuals</div>
+      <div class="card-body">
+        <h5 class="card-title">Uploaded</h5>
+        <p class="card-text">
+
+          {{complete}} of {{ all_docs }}
+
+        </p>
+        <a href="{% url "document_review" %}">Upload</a>
+      </div>
+  </div>
+</div>
+
+  <div class="col">
+  <div class="card text-bg-dark mb-3" style="max-width: 18rem;">
+    <div class="card-header">Tooling &amp; Equipment</div>
     <div class="card-body">
       <h5 class="card-title">Dark card title</h5>
       <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
     </div>
+  </div>
+</div>
+
+  <div class="col">
+  <div class="card text-bg-dark mb-3" style="max-width: 18rem;">
+    <div class="card-header">Staff Competency</div>
+    <div class="card-body">
+      <h5 class="card-title">Dark card title</h5>
+      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+    </div>
+  </div>
+</div>
+
 </div>
 
 {% endblock content %}

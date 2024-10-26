@@ -8,8 +8,8 @@ urlpatterns = [
     path('', views.client_login, name='client_login'),
     path('logout/', views.client_logout, name='client_logout'),  # Assuming you have a logout view
     path('dashboard/', views.client_dashboard, name='client_dashboard'),
-    path('upload/', views.upload_pdf, name="upload_pdf"),
-    path('documents/', views.user_pdfs, name="documents"),
+    path('documents/upload/<int:id>/', views.upload_document, name='upload_document'),
+    path('documents/', views.document_review, name="document_review"),
     path('password_change/', PasswordChangeView.as_view(
         form_class=CustomPasswordChangeForm,
         template_name='client_app/password_change.html',
