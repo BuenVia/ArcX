@@ -69,9 +69,17 @@ def client_pw_edit(request, id):
     if request.user.is_superuser:
         if request.method == 'POST':
             form = UserRegistrationForm(request.POST)
-            if form.is_valid():
-                # Process the form data, save user, etc.
-                return redirect('some_success_page')
+            password = request.POST.get('password')
+            repeat_password = request.POST.get('repeat_password')
+            print(request.POST.get('password'))
+            print(request.POST.get('repeat_password'))
+            if password == repeat_password:
+                if form.is_valid():
+                    user = user_form.save()
+                    user.set_password('unencrypted_password')  # replace with your real password
+                    user.save()
+                    # Process the form data, save user, etc.
+                    return redirect('clients')
         else:
             form = UserRegistrationForm()
 
