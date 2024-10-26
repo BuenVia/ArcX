@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "ArcX"
+name = "arcx"
 version = "0.1.0"
 description = ""
 authors = ["Matt Clifford <matthew.clifford@hfx.co.uk>"]
