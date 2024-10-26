@@ -53,3 +53,21 @@ def upload_pdf(request):
 def user_pdfs(request):
     pdfs = ClientUserPDF.objects.filter(user=request.user)  # Fetch all PDFs for the logged-in user
     return render(request, 'client_app/documents.html', {'pdfs': pdfs})
+
+
+"""
+- Create chapter model (for the 11 chapters) - will need title, upload date, due date
+- Create model for tools and competency
+- Create calendar model for the tools and competency
+
+- Front page showing how many documents uploaded and access to calendar
+- Document page showing details of each of the 11 chapters - including what has been uploaded and what is out standing.
+- Calendar/Date page showing the schedule for:
+-   - Equipment/Tool checks
+-   - Competency/Acreditation expiry dates
+- Front page should show warnings for:
+-   - Pending due date of documents
+-   - Pending expiry dates of tools/ competency.
+
+
+"""
