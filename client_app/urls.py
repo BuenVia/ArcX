@@ -14,7 +14,7 @@ urlpatterns = [
     # Staff
     path('staff/', views.client_staff, name='client_staff'),
     # Equipment
-    
+    path('equipment/', views.client_equipment, name='client_equipment'),
     # Password
     path('password_change/', PasswordChangeView.as_view(
         form_class=CustomPasswordChangeForm,

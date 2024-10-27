@@ -10,11 +10,18 @@ body {
     color: #eee;
 }
 
+.main-body {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
 .container {
-    margin: 1em;
+    width: 100%;
+    margin: 5em;
     padding: 1em;
     font-family: 'Courier New', Courier, monospace;
-
 }
 
 .logo {

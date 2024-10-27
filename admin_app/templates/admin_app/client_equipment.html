@@ -1,0 +1,26 @@
+{% extends "admin_app/base.html" %}
+
+{% block content %}
+
+<h1>Equipment</h1>
+
+{% for equipment in equipment_list %}
+    <div class="card text-bg-dark mb-3">
+        <h3>Equipment: {{ equipment.equipment.name }}</h3>
+        <p>Item Number: {{ equipment.equipment.item_number }}</p>
+        <p>Make: {{ equipment.equipment.make }}</p>
+        <p>Model: {{ equipment.equipment.model }}</p>
+        <p>Serial Number: {{ equipment.equipment.serial_number }}</p>
+        <p>Equipment Group: {{ equipment.equipment.equipment_group.name }}</p>
+
+        {% for test in equipment.equipmenttest_set.all %}
+            <h4>Test Data:</h4>
+            <p>Calibration Date: {{ test.calibrate_date }}</p>
+            <p>Service Date: {{ test.service_date }}</p>
+            <p>Inspection Date: {{ test.inspection_date }}</p>
+            <p>Test Date: {{ test.test_date }}</p>
+        {% endfor %}
+    </div>
+{% endfor %}
+
+{% endblock content %}

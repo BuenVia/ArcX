@@ -1,0 +1,46 @@
+{% extends "admin_app/base.html" %}
+
+{% block content %}
+
+<h1>Competency</h1>
+
+{% for staff in staff_list %}
+
+<div class="card text-bg-dark mb-3" style="width: 100%;">
+    <div class="card-header">
+        <p>{{ staff.first_name }} {{ staff.last_name }}</p>
+        <p>Staff ID: {{ staff.staff_id }}</p>
+    </div>
+    <div class="card-body">
+
+        
+        <h3>Roles:</h3>
+        {% for staff_role in staff.staffrole_set.all %}
+        <p>{{ staff_role.role.role_name }}</p>
+        {% endfor %}
+        
+        
+        <h3>Qualifications:</h3>
+        {% for qualification in staff.staffqualification_set.all %}
+        {% with qualification_date=qualification.qualification_date %}
+        {% with time_diff=today|timesince:qualification_date %}
+                    <p 
+                    {% if qualification_date < today %}
+                            style="background-color: red;"
+                        {% elif time_diff <= "2 months" %}
+                        style="background-color: yellow;"
+                        {% endif %}
+                        >
+                        {{ qualification.qualification.qualification_name }} - {{ qualification_date }}
+                    </p>
+                    {% endwith %}
+                    {% endwith %}
+                    {% endfor %}
+                    
+                    
+    </div>
+</div>
+
+{% endfor %}
+
+{% endblock content %}

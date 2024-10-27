@@ -7,7 +7,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 # from .forms import ClientUserPDFForm
 # from .models import ClientUserPDF
 from django.utils import timezone
-from admin_app.models import DocumentClient, DocumentTitle, Staff, StaffRole, StaffQualification
+from admin_app.models import DocumentClient, DocumentTitle, Staff, StaffRole, StaffQualification, EquipmentUser
 from .forms import DocumentUploadForm
 
 # Login/ Logout/ Dashboard
@@ -43,14 +43,15 @@ def client_dashboard(request):
     all_docs = len(documents)
     #Staff
     staff = Staff.objects.filter(user=request.user)
-    print(staff)
     staff_num = len(staff)
     #Equipment
-
+    equipment = EquipmentUser.objects.filter(user=request.user)
+    equipment_num = len(equipment)
     context = {
         'complete': complete, 
         'all_docs': all_docs,
-        'staff_num': staff_num
+        'staff_num': staff_num,
+        'equipment_num': equipment_num
         }
     return render(request, 'client_app/dashboard.html', context=context)
     # return render(request, 'client_app/dashboard.html', {'documents': [], 'complete': 0, 'all_docs': 0})
@@ -102,6 +103,21 @@ def client_staff(request):
         .order_by('min_role_id')
     today = date.today()
     return render(request, 'client_app/client_staff.html', {'staff_list': staff_list, 'today': today})
+
+
+@login_required
+def client_equipment(request):
+    # Fetch EquipmentUser instances for the specified user and prefetch related data
+    equipment_list = EquipmentUser.objects.filter(user_id=request.user)\
+        .select_related('equipment__equipment_group')\
+        .prefetch_related(Prefetch('equipmenttest_set'))\
+        .order_by('equipment__equipment_group_id')  # Order by EquipmentGroup ID
+
+    context = {
+        'equipment_list': equipment_list,
+    }
+    return render(request, 'client_app/client_equipment.html', context=context)
+
 """
 - Create chapter model (for the 11 chapters) - will need title, upload date, due date
 - Create model for tools and competency

@@ -1,13 +1,14 @@
-from django.shortcuts import render, redirect, get_object_or_404
+import os
+from datetime import date
+from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.db.models import Prefetch, Min
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import UserRegistrationForm, AddUserForm
-# from client_app.models import ClientUserPDF
-from .models import DocumentClient
-import os
-from django.conf import settings
+from .models import DocumentClient, DocumentTitle, Staff, StaffRole, StaffQualification, EquipmentUser
 
 def admin_login(request):
     if request.method == 'POST':
@@ -120,7 +121,8 @@ def document_view(request):
     if request.user.is_superuser:
         user_pdfs = DocumentClient.objects.all()
         return render(request, 'admin_app/documents.html', {"user_pdfs": user_pdfs})
-    
+
+@login_required
 def delete_pdf(request, pdf_id):
     # Find the PDF object by its ID
     pdf = get_object_or_404(DocumentClient, id=pdf_id)
@@ -140,3 +142,30 @@ def delete_pdf(request, pdf_id):
 
     # Redirect to some page after deletion (e.g., PDF list or success page)
     return redirect('admin_documents')  # Replace with your desired redirect
+
+@login_required
+def admin_equipment(request, id):
+        # Fetch EquipmentUser instances for the specified user and prefetch related data
+    equipment_list = EquipmentUser.objects.filter(user_id=id)\
+        .select_related('equipment__equipment_group')\
+        .prefetch_related(Prefetch('equipmenttest_set'))\
+        .order_by('equipment__equipment_group_id')  # Order by EquipmentGroup ID
+
+    context = {
+        'equipment_list': equipment_list,
+    }
+    return render(request, 'admin_app/client_equipment.html', context=context)
+
+
+@login_required
+def admin_competency(request, id):
+    staff_list = Staff.objects.filter(user_id=id)\
+        .select_related('user')\
+        .prefetch_related(
+            Prefetch('staffrole_set', queryset=StaffRole.objects.select_related('role')),
+            Prefetch('staffqualification_set', queryset=StaffQualification.objects.select_related('qualification'))
+        )\
+        .annotate(min_role_id=Min('staffrole__role_id'))\
+        .order_by('min_role_id')
+    today = date.today()
+    return render(request, 'admin_app/client_competency.html', {'staff_list': staff_list, 'today': today})

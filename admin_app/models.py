@@ -91,7 +91,7 @@ class EquipmentGroup(models.Model):
     def __str__(self):
         return self.name
 
-
+# Repo of all equipment, regardless of ueser
 class Equipment(models.Model):
     name = models.CharField(max_length=255)
     item_number = models.CharField(max_length=90)
@@ -106,19 +106,32 @@ class Equipment(models.Model):
     def __str__(self):
         return self.name
 
+# Euipment linked to a user
+class EquipmentUser(models.Model):
+    equipment = models.ForeignKey(Equipment, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "equipment_user"
+
+    def __str__(self):
+        return f"{self.equipment} {self.user}"
 
 class EquipmentTest(models.Model):
-    calibrate_date = models.DateField()
-    calibrate_freq = models.IntegerField()
-    service_date = models.DateField()
-    servcice_freq = models.IntegerField()
-    inspection_date = models.DateField()
-    inspection_freq = models.IntegerField()
-    test_date = models.DateField()
-    test_freq = models.IntegerField()
-
+    calibrate_date = models.DateField(blank=True, null=True)
+    calibrate_freq = models.IntegerField(blank=True, null=True)
+    service_date = models.DateField(blank=True, null=True)
+    servcice_freq = models.IntegerField(blank=True, null=True)
+    inspection_date = models.DateField(blank=True, null=True)
+    inspection_freq = models.IntegerField(blank=True, null=True)
+    test_date = models.DateField(blank=True, null=True)
+    test_freq = models.IntegerField(blank=True, null=True)
+    equipmentuser = models.ForeignKey(EquipmentUser, on_delete=models.CASCADE)
+    
     class Meta:
         db_table = "equipment_test"
 
     def __str__(self):
-        return self.calibrate_date
+        return f"{self.equipmentuser} Test Data"
+
+    

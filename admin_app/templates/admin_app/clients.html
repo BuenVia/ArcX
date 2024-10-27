@@ -13,6 +13,8 @@
             <tr>
                 <th scope="col">Username</th>
                 <th>Documents</th>
+                <th>Equipment</th>
+                <th>Competency</th>
                 <th scope="col">Edit Details</th>
                 <th scope="col">Edit Password</th>
             </tr>
@@ -21,7 +23,9 @@
             {% for user in users %}
             <tr>
                 <td>{{ user.username }}</td>
-                <td><a href="/manage/client_docs/{{user.id}}">Go</a></td>
+                <td><a href="/manage/client_docs/{{user.id}}">View</a></td>
+                <td><a href="{% url 'admin_equipment' user.id%}">View</a></td>
+                <td><a href="{% url 'admin_competency' user.id%}">View</a></td>
                 <td><a href="{{ user.id }}">Edit</a></td>
                 <td><a href="password/{{ user.id }}">Edit</a></td>
             </tr>
