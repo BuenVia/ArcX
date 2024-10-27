@@ -57,7 +57,7 @@ class Qualifications(models.Model):
         db_table = "qualification"
 
     def __str__(self):
-        return f"{self.role}: {self.qualifiation_name}"
+        return f"{self.role}: {self.qualification_name}"
     
 
 class StaffRole(models.Model):
@@ -116,3 +116,9 @@ class EquipmentTest(models.Model):
     inspection_freq = models.IntegerField()
     test_date = models.DateField()
     test_freq = models.IntegerField()
+
+    class Meta:
+        db_table = "equipment_test"
+
+    def __str__(self):
+        return self.calibrate_date

@@ -1,11 +1,13 @@
+from datetime import date
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.db.models import Prefetch, Min
 from django.shortcuts import render, redirect, get_object_or_404
 # from .forms import ClientUserPDFForm
 # from .models import ClientUserPDF
 from django.utils import timezone
-from admin_app.models import DocumentClient, DocumentTitle, Staff, StaffRole
+from admin_app.models import DocumentClient, DocumentTitle, Staff, StaffRole, StaffQualification
 from .forms import DocumentUploadForm
 
 # Login/ Logout/ Dashboard
@@ -90,8 +92,16 @@ def upload_document(request, id):
 
 @login_required
 def client_staff(request):
-    staff = Staff.objects.filter(user=request.user)
-    return render(request, 'client_app/client_staff.html', {'staff': staff})
+    staff_list = Staff.objects.filter(user_id=request.user)\
+        .select_related('user')\
+        .prefetch_related(
+            Prefetch('staffrole_set', queryset=StaffRole.objects.select_related('role')),
+            Prefetch('staffqualification_set', queryset=StaffQualification.objects.select_related('qualification'))
+        )\
+        .annotate(min_role_id=Min('staffrole__role_id'))\
+        .order_by('min_role_id')
+    today = date.today()
+    return render(request, 'client_app/client_staff.html', {'staff_list': staff_list, 'today': today})
 """
 - Create chapter model (for the 11 chapters) - will need title, upload date, due date
 - Create model for tools and competency

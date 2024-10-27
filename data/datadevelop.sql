@@ -148,27 +148,106 @@ INSERT INTO staff_role (staff_id, role_id) VALUES
 INSERT INTO staff_qualification (staff_id, qualification_id, qualification_date)
 VALUES 
     -- Qualifications for a VDA staff member
-    (1, 1, '2022-01-15'), -- VDA Qual
-    (1, 5, '2023-03-10'), -- Audatex
+    (1, 1, '2025-01-15'), -- VDA Qual
+    (1, 5, '2025-03-10'), -- Audatex
 
     -- Qualifications for a MET and PNL staff member (dual-role)
-    (2, 2, '2022-02-20'), -- MET Qual
-    (2, 7, '2023-04-25'), -- ADAS AOM230
+    (2, 2, '2024-11-20'), -- MET Qual
+    (2, 7, '2024-08-25'), -- ADAS AOM230
 
     -- More qualifications for another staff member with MET and PNL roles
-    (3, 2, '2022-05-22'), -- MET Qual
-    (3, 6, '2023-07-05'), -- GEOM AOM220
+    (3, 2, '2025-05-22'), -- MET Qual
+    (3, 6, '2025-07-05'), -- GEOM AOM220
     (3, 8, '2023-08-30'), -- Glazing
 
     -- Qualifications for a PNT staff member
-    (4, 4, '2021-11-12'), -- PNT Qual
+    (4, 4, '2024-11-12'), -- PNT Qual
 
     -- Qualifications for a PNL-only staff member
-    (5, 11, '2022-10-01'), -- HEV Aware
-    (5, 12, '2022-12-14')  -- 1140 Spot
+    (5, 11, '2025-10-01'), -- HEV Aware
+    (5, 12, '2024-12-14')  -- 1140 Spot
     ;
 
 -- Repeat and vary the assignments above to suit the number of staff and qualifications.
+
+-- Insert data into equipment_group table with predefined IDs
+INSERT INTO equipment_group (id, name) VALUES
+    (1, 'Pulling and Body Alignment'),
+    (2, 'Welding Equipment'),
+    (3, 'Ramps and Lifting Equipment'),
+    (4, 'Paint Booth and Mixing Room'),
+    (5, 'Painting & Paintshop Equipment'),
+    (6, 'Compressors & Dryers'),
+    (7, 'Alignment & Geometry'),
+    (8, 'Specialist Measuring'),
+    (9, 'General Workshop Equipment'),
+    (10, 'Site Information & Certificates');
+
+
+-- Insert data into equipment table with reference to equipment_group table
+
+-- Pulling and Body Alignment (equipment_group_id = 1)
+INSERT INTO equipment (id, item_number, name, make, model, serial_number, equipment_group_id) VALUES
+    (1, '001', 'Pulling and Alignment Jig', 'Blackhawk', 'Koreck', 'N/A', 1),
+    (2, '002', 'Measuring System', 'Blackhawk', 'Shark', 'B02C5460', 1);
+
+-- Welding Equipment (equipment_group_id = 2)
+INSERT INTO equipment (id, item_number, name, make, model, serial_number, equipment_group_id) VALUES
+    (3, '009', 'Inverter Spot Weld+F1+C15:W17', 'GYS', 'PTI Gebius', '22.05.024700.00033', 2),
+    (4, '010', 'MIG Welder', 'Telwin', 'Treo 243', 'NK - First new', 2),
+    (5, '011', 'Oxy-Accetyline', 'N/K', 'BOC', 'N/K', 2),
+    (6, '012', 'Self Peircing Riviter', 'W&S', 'Xpress 800', '201401296', 2),
+    (7, '013', 'Dent Puller', 'Telwin', 'Duo', '28708417 + 32196417', 2);
+
+-- Ramps and Lifting Equipment (equipment_group_id = 3)
+INSERT INTO equipment (id, item_number, name, make, model, serial_number, equipment_group_id) VALUES
+    (8, '017', 'Vehicle Lift 2 Post', 'Bend Pax', 'XPR9', '50000006109-016', 3),
+    (9, '018', 'Vehicle Lift 2 Post', 'Automotech', 'AS6140A', '6610740703831', 3),
+    (10, '019', 'Vehicle Lift 4 Post', 'Ravaglioli', '4400.3', '10559556', 3),
+    (11, '020', 'Vehicle Lift AirBag', 'Guiliano', '', '42L1700268', 3),
+    (12, '021', 'Vehicle Lift AirBag', 'Guiliano', '', '42L1700264', 3),
+    (13, '022', 'Vehicle Lift AirBag', 'Guiliano', '', '42L1700262', 3);
+
+-- Paint Booth and Mixing Room (equipment_group_id = 4)
+INSERT INTO equipment (id, item_number, name, make, model, serial_number, equipment_group_id) VALUES
+    (14, '025', 'Paint Booth', 'Dalby', 'X Booth', 'LHS', 4),
+    (15, '026', 'Paint Booth', 'Dalby', 'X Booth', 'RHS', 4);
+
+-- Painting & Paintshop Equipment (equipment_group_id = 5)
+INSERT INTO equipment (id, item_number, name, make, model, serial_number, equipment_group_id) VALUES
+    (16, '033', 'Paint Scales', 'Metler Toledo', 'RPA', 'C246250329', 5),
+    (17, '034', 'Paint Scales', 'Milsteda', 'PMA7501', '33006680', 5);
+
+-- Compressors & Dryers (equipment_group_id = 6)
+INSERT INTO equipment (id, item_number, name, make, model, serial_number, equipment_group_id) VALUES
+    (18, '041', 'Blackhawk Korek', 'MARK', 'MSA15-8', '1TJ487981', 6);
+
+-- Alignment & Geometry (equipment_group_id = 7)
+INSERT INTO equipment (id, item_number, name, make, model, serial_number, equipment_group_id) VALUES
+    (19, '045', 'Wheel Aligner', 'Hofmann', 'Logik 6', '10444722', 7),
+    (20, '046', 'Headlamp Beam Setter', 'Tecnolux', 'Polar', '3346', 7);
+
+-- Specialist Measuring (equipment_group_id = 8)
+INSERT INTO equipment (id, item_number, name, make, model, serial_number, equipment_group_id) VALUES
+    (21, '049', 'Torque Wrench TW1 00-20 Nm - Company Owned', 'Sealey', 'STS104', 'NA', 8),
+    (22, '050', 'Torque Wrench TW2 20-200 Nm - Company Owned', 'Sealey', 'STW309', 'NA', 8),
+    (23, '051', 'Torque Wrench TW3 15-300 Nm - Company Owned', 'Snap-On', 'ATeCH3F', '917104682', 8),
+    (24, '052', 'Torque Wrench TW4 19-110Nm', 'TengTools', '', 'WTW1', 8),
+    (25, '053', 'Torque Wrench TW5 30-210 Nm', 'TengTools', '', '338996', 8),
+    (26, '054', 'Torque Wrench TW6 30-210 Nm', 'Draper', '', '2012010708', 8),
+    (27, '055', 'Torque Wrench TW7 60-300 Nm', 'Norbar', '', '2010/269241', 8),
+    (28, '056', 'Torque Wrench TW8 70-350 Nm', 'Snap-On', '', '0113505208', 8),
+    (29, '057', 'Tyre Inflator 0-9 bar TF1', 'NK', '', '4045121', 8),
+    (30, '058', 'Tyre Inflator 0-9 bar TF2', 'NK', '', '5223055', 8),
+    (31, '059', 'Tyre Inflator 0-9 bar TF3', 'NK', '', '1473618', 8),
+    (32, '060', 'Tyre Inflator 0-9 bar TF4 - PCL Digital', 'NK', '', '240409189', 8);
+
+-- General Workshop Equipment (equipment_group_id = 9)
+INSERT INTO equipment (id, item_number, name, make, model, serial_number, equipment_group_id) VALUES
+    (33, '063', 'Air Con Machine', 'Ecotechnics', 'Twin Pro', 'EC1704663/2017', 9),
+    (34, '064', 'Tyre Machine', 'Bradbury', 'WC5201', 'NK', 9),
+    (35, '065', 'ADAS Tablet', 'Hella Gutmann', 'MEGA Max', 'K2210N0098338', 9),
+    (36, '066', 'Dust Extraction', 'Festool', '', '', 9);
 
 
 COMMIT;
