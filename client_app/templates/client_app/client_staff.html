@@ -1,0 +1,15 @@
+{% extends "client_app/base.html" %}
+
+{% block content %}
+
+{% for person in staff %}
+
+<div class="card text-bg-dark mb-3" style="width: 100%;">
+
+    {{ person.first_name }} {{ person.last_name }}
+
+</div>
+
+{% endfor %}
+
+{% endblock content %}

@@ -4,6 +4,13 @@ BEGIN;
 DELETE FROM auth_user;
 DELETE FROM document_titles;
 DELETE FROM document_clients;
+DELETE FROM staff;
+DELETE FROM role_names;
+DELETE FROM qualification;
+DELETE FROM staff_role;
+DELETE FROM staff_qualification;
+
+
 -- DROP TABLE client_app_clientuserpdf;
 
 -- DROP TABLE IF EXISTS document_titles;
@@ -58,6 +65,110 @@ VALUES
 
     (1, 4, FALSE, NULL, NULL), (2, 4, FALSE, NULL, NULL), (3, 4, FALSE, NULL, NULL), (4, 4, FALSE, NULL, NULL), (5, 4, FALSE, NULL, NULL),
     (6, 4, FALSE, NULL, NULL), (7, 4, FALSE, NULL, NULL), (8, 4, FALSE, NULL, NULL), (9, 4, FALSE, NULL, NULL), (10, 4, FALSE, NULL, NULL), (11, 4, FALSE, NULL, NULL);
+
+
+-- Populate Staff table with predefined IDs
+INSERT INTO staff (id, first_name, last_name, staff_id, user_id) VALUES
+    (1, 'John', 'Doe', 'JD001', 2),
+    (2, 'Jane', 'Smith', 'JS002', 2),
+    (3, 'Alice', 'Brown', 'AB003', 2),
+    (4, 'Robert', 'Davis', 'RD004', 2),
+    (5, 'Laura', 'Wilson', 'LW005', 2),
+    
+    (6, 'Tom', 'Taylor', 'TT006', 3),
+    (7, 'Lucy', 'Adams', 'LA007', 3),
+    (8, 'Ethan', 'Clark', 'EC008', 3),
+    (9, 'Olivia', 'Johnson', 'OJ009', 3),
+    (10, 'Daniel', 'Martinez', 'DM010', 3),
+    
+    (11, 'Emily', 'Lopez', 'EL011', 4),
+    (12, 'Aaron', 'Hall', 'AH012', 4),
+    (13, 'Sophia', 'Lee', 'SL013', 4),
+    (14, 'Michael', 'Young', 'MY014', 4),
+    (15, 'Grace', 'Harris', 'GH015', 4);
+
+-- Populate Roles table with predefined IDs for consistency
+INSERT INTO role_names (id, role_name) VALUES
+    (1, 'VDA'),
+    (2, 'MET'),
+    (3, 'PNL'),
+    (4, 'PNT');
+
+-- Populating the Qualification table with qualification names, durations, and role IDs
+INSERT INTO qualification (qualification_name, duration, role_id) VALUES
+    ('VDA Qual', NULL, 1),
+    ('MET Qual', NULL, 2),
+    ('PNL Qual', NULL, 3),
+    ('PNT Qual', NULL, 4),
+    ('Audatex', 12, 1),
+    ('GEOM AOM220', NULL, 2),
+    ('ADAS AOM230', NULL, 2),
+    ('Glazing', 36, 2),
+    ('F Gas', NULL, 2),
+    ('Hybrid', 36, 2),
+    ('HEV Aware', NULL, 2),
+    ('1140 Spot', 24, 3),
+    ('4872 MIG', 24, 3),
+    ('Braze', 24, 3),
+    ('Boron', 24, 3),
+    ('AOM009', 24, 3),
+    ('St Bond', 36, 3),
+    ('Rivet', 36, 3),
+    ('AOM030', 36, 3),
+    ('AOM028', 36, 3),
+    ('AOM032', 36, 3);
+
+
+-- Populate StaffRole table, adding MET and PNL roles for applicable staff
+INSERT INTO staff_role (staff_id, role_id) VALUES
+    (1, 1), -- VDA
+    (2, 2), (2, 3), -- MET, PNL
+    (3, 4), -- PNT
+    (4, 2), (4, 3), -- MET, PNL
+    (5, 1), -- VDA
+    
+    (6, 4), -- PNT
+    (7, 2), (7, 3), -- MET, PNL
+    (8, 1), -- VDA
+    (9, 2), (9, 3), -- MET, PNL
+    (10, 4), -- PNT
+    
+    (11, 1), -- VDA
+    (12, 2), (12, 3), -- MET, PNL
+    (13, 4), -- PNT
+    (14, 2), (14, 3), -- MET, PNL
+    (15, 1); -- VDA
+
+-- Example insertion for the `StaffQualification` table
+-- Ensure that dates are within a valid range and assigned to staff based on their roles.
+
+-- Select a random subset of staff for qualification assignment.
+-- Assign 1-3 qualifications per staff member.
+
+INSERT INTO staff_qualification (staff_id, qualification_id, qualification_date)
+VALUES 
+    -- Qualifications for a VDA staff member
+    (1, 1, '2022-01-15'), -- VDA Qual
+    (1, 5, '2023-03-10'), -- Audatex
+
+    -- Qualifications for a MET and PNL staff member (dual-role)
+    (2, 2, '2022-02-20'), -- MET Qual
+    (2, 7, '2023-04-25'), -- ADAS AOM230
+
+    -- More qualifications for another staff member with MET and PNL roles
+    (3, 2, '2022-05-22'), -- MET Qual
+    (3, 6, '2023-07-05'), -- GEOM AOM220
+    (3, 8, '2023-08-30'), -- Glazing
+
+    -- Qualifications for a PNT staff member
+    (4, 4, '2021-11-12'), -- PNT Qual
+
+    -- Qualifications for a PNL-only staff member
+    (5, 11, '2022-10-01'), -- HEV Aware
+    (5, 12, '2022-12-14')  -- 1140 Spot
+    ;
+
+-- Repeat and vary the assignments above to suit the number of staff and qualifications.
 
 
 COMMIT;

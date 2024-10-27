@@ -5,9 +5,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 # from .forms import ClientUserPDFForm
 # from .models import ClientUserPDF
 from django.utils import timezone
-from admin_app.models import DocumentClient, DocumentTitle
+from admin_app.models import DocumentClient, DocumentTitle, Staff, StaffRole
 from .forms import DocumentUploadForm
 
+# Login/ Logout/ Dashboard
 def client_login(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -31,20 +32,35 @@ def client_logout(request):
 
 @login_required
 def client_dashboard(request):
+    # Documents
     documents = DocumentClient.objects.filter(user=request.user)
     complete = 0
     for doc in documents:
         if doc.uploaded:
             complete += 1
     all_docs = len(documents)
-    return render(request, 'client_app/dashboard.html', {'documents': documents, 'complete': complete, 'all_docs': all_docs})
+    #Staff
+    staff = Staff.objects.filter(user=request.user)
+    print(staff)
+    staff_num = len(staff)
+    #Equipment
+
+    context = {
+        'complete': complete, 
+        'all_docs': all_docs,
+        'staff_num': staff_num
+        }
+    return render(request, 'client_app/dashboard.html', context=context)
     # return render(request, 'client_app/dashboard.html', {'documents': [], 'complete': 0, 'all_docs': 0})
 
+
+### DOCUMENTATION
 @login_required
 def document_review(request):
     user_documents = DocumentClient.objects.filter(user=request.user)
     return render(request, 'client_app/documents.html', {'user_documents': user_documents})
 
+@login_required
 def upload_document(request, id):
     document_title = get_object_or_404(DocumentTitle, id=id)
 
@@ -71,6 +87,11 @@ def upload_document(request, id):
 
     return render(request, 'client_app/upload_document.html', {'form': form, 'document_title': document_title})
 
+
+@login_required
+def client_staff(request):
+    staff = Staff.objects.filter(user=request.user)
+    return render(request, 'client_app/client_staff.html', {'staff': staff})
 """
 - Create chapter model (for the 11 chapters) - will need title, upload date, due date
 - Create model for tools and competency
