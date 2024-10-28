@@ -1,4 +1,5 @@
 import os
+from collections import defaultdict
 from datetime import date
 from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
@@ -7,8 +8,8 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.db.models import Prefetch, Min
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import UserRegistrationForm, AddUserForm
-from .models import DocumentClient, DocumentTitle, Staff, StaffRole, StaffQualification, EquipmentUser
+from .forms import UserRegistrationForm, AddUserForm, EquipmentForm
+from .models import DocumentClient, DocumentTitle, Staff, StaffRole, StaffQualification,  Equipment, EquipmentGroup, EquipmentUser
 
 def admin_login(request):
     if request.method == 'POST':
@@ -110,6 +111,7 @@ def client_new(request):
 
         return render(request, 'admin_app/client_new.html', {'form': form})
 
+# Documentation
 @login_required
 def client_document_view(request, id):
     if request.user.is_superuser:
@@ -143,8 +145,66 @@ def delete_pdf(request, pdf_id):
     # Redirect to some page after deletion (e.g., PDF list or success page)
     return redirect('admin_documents')  # Replace with your desired redirect
 
+# Equipment
 @login_required
-def admin_equipment(request, id):
+def admin_all_equipment(request):
+    equipment_items = Equipment.objects.select_related('equipment_group').all()
+
+    # Initialize a dictionary to hold the grouped data
+    grouped_equipment = defaultdict(list)
+
+    # Group equipment by EquipmentGroup
+    for equipment in equipment_items:
+        group_name = equipment.equipment_group.name
+        grouped_equipment[group_name].append(equipment)
+
+    # Transform the grouped data into the desired structure
+    equipment_list = [
+        {
+            "group": group,
+            "items": items,
+        }
+        for group, items in grouped_equipment.items()
+    ]
+    context = {'equipment_list': equipment_list}
+    return render(request, 'admin_app/admin_add_equipment.html', context=context)
+
+@login_required
+def admin_all_equipment_new(request):
+    if request.method == 'POST':
+        form = EquipmentForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('admin_all_equipment')  # Redirect to the equipment list or another appropriate page
+    else:
+        form = EquipmentForm()
+    
+    return render(request, 'admin_app/admin_equipment_add_edit.html', {'form': form, 'is_edit': False})
+
+@login_required
+def admin_all_equipment_edit(request, id):
+    equipment = get_object_or_404(Equipment, id=id)
+    if request.method == 'POST':
+        form = EquipmentForm(request.POST, instance=equipment)
+        if form.is_valid():
+            form.save()
+            return redirect('admin_all_equipment')  # Redirect to the equipment list or another appropriate page
+    else:
+        form = EquipmentForm(instance=equipment)
+    
+    return render(request, 'admin_app/admin_equipment_add_edit.html', {'form': form, 'is_edit': True})
+
+@login_required
+def admin_all_equipment_delete(request, id):
+    equipment = get_object_or_404(Equipment, id=id)
+    if request.method == 'POST':
+        equipment.delete()
+        return redirect('admin_all_equipment')  # Redirect to the list view after deletion
+
+    return render(request, 'admin_app/admin_delete_equipment.html', {'equipment': equipment})
+
+@login_required
+def admin_client_equipment(request, id):
         # Fetch EquipmentUser instances for the specified user and prefetch related data
     equipment_list = EquipmentUser.objects.filter(user_id=id)\
         .select_related('equipment__equipment_group')\
@@ -156,7 +216,7 @@ def admin_equipment(request, id):
     }
     return render(request, 'admin_app/client_equipment.html', context=context)
 
-
+# Competenecy
 @login_required
 def admin_competency(request, id):
     staff_list = Staff.objects.filter(user_id=id)\

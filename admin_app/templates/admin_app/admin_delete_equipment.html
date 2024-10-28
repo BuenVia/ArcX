@@ -1,0 +1,15 @@
+{% extends "admin_app/base.html" %}
+
+{% block content %}
+
+<h1>Confirm Delete</h1>
+<p>Are you sure you want to delete "{{ equipment.name }}"?</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Yes, delete</button>
+    <a href="{% url 'admin_all_equipment' equipment.id %}">Cancel</a>
+</form>
+
+
+{% endblock content %}

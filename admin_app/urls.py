@@ -15,7 +15,11 @@ urlpatterns = [
     path('documents/', views.document_view, name='admin_documents'),
     path('delete_pdf/<int:pdf_id>/', views.delete_pdf, name='admin_delete_pdf'),
     # Equipment - CRUD
-    path('equipment/<int:id>/', views.admin_equipment, name='admin_equipment'),
+    path('equipment/', views.admin_all_equipment, name='admin_all_equipment'),
+    path('equipment/all/', views.admin_all_equipment_new, name='admin_all_equipment_new'),
+    path('equipment/all/<int:id>', views.admin_all_equipment_edit, name='admin_all_equipment_edit'),
+    path('equipment/all/delete/<int:id>', views.admin_all_equipment_delete, name='admin_all_equipment_delete'),
+    path('equipment/<int:id>/', views.admin_client_equipment, name='admin_equipment'),
     # Competency - CRUD
     path('competency/<int:id>/', views.admin_competency, name='admin_competency'),
 ]

@@ -1,0 +1,39 @@
+{% extends "admin_app/base.html" %}
+
+{% block content %}
+
+<h1>Manage All Equipment</h1>
+<a href="{% url 'admin_all_equipment_new' %}" class="btn btn-info">Add</a>
+
+{% for equipment_group in equipment_list %}
+
+
+<table class="table table-dark">
+    <thead>
+        <tr>
+            <h3>{{ equipment_group.group }}</h3>
+        </tr>
+        <tr>
+            <th>Item No.</th>
+            <th>Item</th>
+            <th>Make</th>
+            <th>Model</th>
+            <th>Serial Number</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for equipment in equipment_group.items %}
+        <tr>
+            <td>{{ equipment.item_number }}</td>
+            <td><a href="{% url 'admin_all_equipment_edit' equipment.id%}">{{ equipment.name }}</a></td>
+            <td>{{ equipment.make }}</td>
+            <td>{{ equipment.model }}</td>
+            <td>{{ equipment.serial_number }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endfor %}
+
+{% endblock content %}
