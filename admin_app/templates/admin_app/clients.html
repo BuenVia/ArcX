@@ -16,7 +16,6 @@
                 <th>Equipment</th>
                 <th>Competency</th>
                 <th scope="col">Edit Details</th>
-                <th scope="col">Edit Password</th>
             </tr>
         </thead>
         <tbody>
@@ -27,7 +26,6 @@
                 <td><a href="{% url 'admin_equipment' user.id%}">View</a></td>
                 <td><a href="{% url 'admin_competency' user.id%}">View</a></td>
                 <td><a href="{{ user.id }}">Edit</a></td>
-                <td><a href="password/{{ user.id }}">Edit</a></td>
             </tr>
             {% endfor %}
         </tbody>
