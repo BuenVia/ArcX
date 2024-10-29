@@ -206,13 +206,50 @@ def admin_all_equipment_delete(request, id):
 @login_required
 def admin_client_equipment(request, id):
         # Fetch EquipmentUser instances for the specified user and prefetch related data
-    equipment_list = EquipmentUser.objects.filter(user_id=id)\
-        .select_related('equipment__equipment_group')\
-        .prefetch_related(Prefetch('equipmenttest_set'))\
-        .order_by('equipment__equipment_group_id')  # Order by EquipmentGroup ID
+    # equipment_list = EquipmentUser.objects.filter(user_id=id)\
+    #     .select_related('equipment__equipment_group')\
+    #     .prefetch_related(Prefetch('equipmenttest_set'))\
+    #     .order_by('equipment__equipment_group_id')  # Order by EquipmentGroup ID
 
+    # context = {
+    #     'equipment_list': equipment_list,
+    # }
+    equipment_list = (
+        EquipmentUser.objects.filter(user_id=id)
+        .select_related('equipment__equipment_group')
+        .prefetch_related(Prefetch('equipmenttest_set'))
+        .order_by('equipment__equipment_group_id')
+    )
+
+    # Group equipment by EquipmentGroup
+    grouped_equipment = {}
+    for equipment_user in equipment_list:
+        group_name = equipment_user.equipment.equipment_group.name
+
+        # Initialize group if it doesn't exist
+        if group_name not in grouped_equipment:
+            grouped_equipment[group_name] = []
+
+        # Gather equipment and related test data
+        item_data = {
+            "id": equipment_user.equipment.id,
+            "name": equipment_user.equipment.name,
+            "item_number": equipment_user.equipment.item_number,
+            "make": equipment_user.equipment.make,
+            "model": equipment_user.equipment.model,
+            "serial_number": equipment_user.equipment.serial_number,
+            "tests": list(equipment_user.equipmenttest_set.all())  # Access tests from equipment_user
+        }
+
+        # Add item data to the appropriate group
+        grouped_equipment[group_name].append(item_data)
+
+    # Convert grouped data to desired structure
     context = {
-        'equipment_list': equipment_list,
+        "equipment_list": [
+            {"group": group_name, "items": items}
+            for group_name, items in grouped_equipment.items()
+        ]
     }
     return render(request, 'admin_app/client_equipment.html', context=context)
 

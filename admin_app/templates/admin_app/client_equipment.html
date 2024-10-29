@@ -4,6 +4,9 @@
 
 <h1>Equipment</h1>
 
+{% for equipment_group in equipment_list %}
+
+<h3>{{ equipment_group.group }}</h3>
 <table>
     <thead>
         <th>Equipment</th>
@@ -11,18 +14,31 @@
         <th>Make</th>
         <th>Model</th>
         <th>Serial No.</th>
-        <th>Group</th>
     </thead>
     <tbody>
-        <!--TO BUILD OUT EQUIPMENT TABLE-->
-        <!--TO BUILD OUT EQUIPMENT TABLE-->
-        <!--TO BUILD OUT EQUIPMENT TABLE-->
-        <!--TO BUILD OUT EQUIPMENT TABLE-->
-        <!--TO BUILD OUT EQUIPMENT TABLE-->
-        <!--TO BUILD OUT EQUIPMENT TABLE-->
+        {% for item in equipment_group.items %}
+        <tr>
+            <td>{{item.name}}</td>
+            <td>{{item.item_number}}</td>
+            <td>{{item.make}}</td>
+            <td>{{item.model}}</td>
+            <td>{{item.serial_number}}</td>
+        </tr>
+        {% for test in equipment_group.items.tests %}
+            ......
+            <tr>
+                <td>Calibration Date: {{ test.calibrate_date }}</td>
+                <td>Service Date: {{ test.service_date }}</td>
+                <td>Inspection Date: {{ test.inspection_date }}</td>
+                <td>Test Date: {{ test.test_date }}</td>
+            </tr>
+        {% endfor %}
+        {% endfor %}
+
     </tbody>
 </table>
-
+{% endfor %}
+{% comment %} 
 {% for equipment in equipment_list %}
     <div class="card text-bg-dark mb-3">
         <h3>Equipment: {{ equipment.equipment.name }}</h3>
@@ -40,6 +56,6 @@
             <p>Test Date: {{ test.test_date }}</p>
         {% endfor %}
     </div>
-{% endfor %}
+{% endfor %} {% endcomment %}
 
 {% endblock content %}
