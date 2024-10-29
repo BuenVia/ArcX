@@ -9,7 +9,7 @@ from django.contrib import messages
 from django.db.models import Prefetch, Min
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import UserRegistrationForm, AddUserForm, EquipmentForm
-from .models import DocumentClient, DocumentTitle, Staff, StaffRole, StaffQualification,  Equipment, EquipmentGroup, EquipmentUser, EquipmentTest
+from .models import DocumentClient, DocumentTitle, Staff, StaffRole, RoleNames, Qualifications, StaffQualification, Equipment, EquipmentGroup, EquipmentUser, EquipmentTest
 
 def admin_login(request):
     if request.method == 'POST':
@@ -268,13 +268,42 @@ def admin_client_equipment(request, id):
 # Competenecy
 @login_required
 def admin_competency(request, id):
-    staff_list = Staff.objects.filter(user_id=id)\
-        .select_related('user')\
-        .prefetch_related(
-            Prefetch('staffrole_set', queryset=StaffRole.objects.select_related('role')),
-            Prefetch('staffqualification_set', queryset=StaffQualification.objects.select_related('qualification'))
-        )\
-        .annotate(min_role_id=Min('staffrole__role_id'))\
-        .order_by('min_role_id')
-    today = date.today()
-    return render(request, 'admin_app/client_competency.html', {'staff_list': staff_list, 'today': today})
+    # Fetch all roles
+    roles = RoleNames.objects.all()
+    
+    data = {}
+    
+    for role in roles:
+        # Get qualifications for this role
+        qualifications = Qualifications.objects.filter(role=role)
+        
+        # Get all staff for this role and their qualifications
+        staff_roles = StaffRole.objects.filter(role=role, staff__user_id=id)
+        
+        staff_data = []
+        
+        for staff_role in staff_roles:
+            # Get qualifications for this specific staff member
+            staff_qualifications = StaffQualification.objects.filter(staff=staff_role.staff, qualification__in=qualifications)
+            
+            # Structure staff qualification data for this role
+            qualification_data = {q.qualification_name: None for q in qualifications}  # initialize with None
+            for sq in staff_qualifications:
+                qualification_data[sq.qualification.qualification_name] = sq.qualification_date
+            
+            staff_data.append({
+                "staff_name": f"{staff_role.staff.first_name} {staff_role.staff.last_name}",
+                "qualifications": qualification_data
+            })
+        
+        # Prepare the role data for the template
+        data[role.role_name] = {
+            "qualifications": [q.qualification_name for q in qualifications],
+            "staff_data": staff_data
+        }
+
+    context = {
+        'data': data,
+    }
+    # context = {'roles_data': roles_data, 'today': today}
+    return render(request, 'admin_app/client_competency.html', context)

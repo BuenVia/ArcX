@@ -7,7 +7,7 @@
 {% for equipment_group in equipment_list %}
 
 <h3>{{ equipment_group.group }}</h3>
-<table class="table table-dark">
+<table class="table table-dark table-striped table-bordered">
     <thead>
         <th>Equipment</th>
         <th>Item No.</th>
@@ -43,24 +43,5 @@
     </tbody>
 </table>
 {% endfor %}
-{% comment %} 
-{% for equipment in equipment_list %}
-    <div class="card text-bg-dark mb-3">
-        <h3>Equipment: {{ equipment.equipment.name }}</h3>
-        <p>Item Number: {{ equipment.equipment.item_number }}</p>
-        <p>Make: {{ equipment.equipment.make }}</p>
-        <p>Model: {{ equipment.equipment.model }}</p>
-        <p>Serial Number: {{ equipment.equipment.serial_number }}</p>
-        <p>Equipment Group: {{ equipment.equipment.equipment_group.name }}</p>
-
-        {% for test in equipment.equipmenttest_set.all %}
-            <h4>Test Data:</h4>
-            <p>Calibration Date: {{ test.calibrate_date }}</p>
-            <p>Service Date: {{ test.service_date }}</p>
-            <p>Inspection Date: {{ test.inspection_date }}</p>
-            <p>Test Date: {{ test.test_date }}</p>
-        {% endfor %}
-    </div>
-{% endfor %} {% endcomment %}
 
 {% endblock content %}
