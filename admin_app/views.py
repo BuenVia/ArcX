@@ -205,15 +205,7 @@ def admin_all_equipment_delete(request, id):
 
 @login_required
 def admin_client_equipment(request, id):
-        # Fetch EquipmentUser instances for the specified user and prefetch related data
-    # equipment_list = EquipmentUser.objects.filter(user_id=id)\
-    #     .select_related('equipment__equipment_group')\
-    #     .prefetch_related(Prefetch('equipmenttest_set'))\
-    #     .order_by('equipment__equipment_group_id')  # Order by EquipmentGroup ID
-
-    # context = {
-    #     'equipment_list': equipment_list,
-    # }
+    # Fetch EquipmentUser instances for the specified user and prefetch related data
     equipment_list = (
         EquipmentUser.objects.filter(user_id=id)
         .select_related('equipment__equipment_group')
@@ -260,12 +252,15 @@ def admin_client_equipment(request, id):
         # Add item data to the appropriate group
         grouped_equipment[group_name].append(item_data)
 
+    user = User.objects.filter(id=id)
+    print(user)
     # Convert grouped data to desired structure
     context = {
         "equipment_list": [
             {"group": group_name, "items": items}
             for group_name, items in grouped_equipment.items()
-        ]
+        ],
+        'user': user[0]
     }
 
     return render(request, 'admin_app/client_equipment.html', context=context)

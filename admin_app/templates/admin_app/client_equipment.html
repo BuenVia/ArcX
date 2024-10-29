@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<h1>Equipment</h1>
+<h1>{{user}}: Equipment</h1>
 
 {% for equipment_group in equipment_list %}
 
@@ -14,6 +14,10 @@
         <th>Make</th>
         <th>Model</th>
         <th>Serial No.</th>
+        <th>Calibration Date</th>
+        <th>Service Date</th>
+        <th>Inspection Date</th>
+        <th>Test Date</th>
     </thead>
     <tbody>
         {% for item in equipment_group.items %}
@@ -25,10 +29,10 @@
             <td>{{item.serial_number}}</td>
             {% if item.latest_test %}
             
-                <td>Calibration Date: {{ item.latest_test.calibrate_date }}</td>
-                <td>Service Date: {{ item.latest_test.service_date }}</td>
-                <td>Inspection Date: {{ item.latest_test.inspection_date }}</td>
-                <td>Test Date: {{ titem.latest_testest.test_date }}</td>
+                <td>{{ item.latest_test.calibrate_date }}</td>
+                <td>{{ item.latest_test.service_date }}</td>
+                <td>{{ item.latest_test.inspection_date }}</td>
+                <td>{{ titem.latest_testest.test_date }}</td>
                 {% else %}
                 <td>No test data available.</td>
             </tr>
