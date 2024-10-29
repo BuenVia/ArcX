@@ -7,7 +7,7 @@
 {% for equipment_group in equipment_list %}
 
 <h3>{{ equipment_group.group }}</h3>
-<table>
+<table class="table table-dark">
     <thead>
         <th>Equipment</th>
         <th>Item No.</th>
@@ -23,16 +23,17 @@
             <td>{{item.make}}</td>
             <td>{{item.model}}</td>
             <td>{{item.serial_number}}</td>
-        </tr>
-        {% for test in equipment_group.items.tests %}
-            ......
-            <tr>
-                <td>Calibration Date: {{ test.calibrate_date }}</td>
-                <td>Service Date: {{ test.service_date }}</td>
-                <td>Inspection Date: {{ test.inspection_date }}</td>
-                <td>Test Date: {{ test.test_date }}</td>
+            {% if item.latest_test %}
+            
+                <td>Calibration Date: {{ item.latest_test.calibrate_date }}</td>
+                <td>Service Date: {{ item.latest_test.service_date }}</td>
+                <td>Inspection Date: {{ item.latest_test.inspection_date }}</td>
+                <td>Test Date: {{ titem.latest_testest.test_date }}</td>
+                {% else %}
+                <td>No test data available.</td>
             </tr>
-        {% endfor %}
+        {% endif %}
+        
         {% endfor %}
 
     </tbody>

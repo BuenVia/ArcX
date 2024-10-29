@@ -9,7 +9,7 @@ from django.contrib import messages
 from django.db.models import Prefetch, Min
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import UserRegistrationForm, AddUserForm, EquipmentForm
-from .models import DocumentClient, DocumentTitle, Staff, StaffRole, StaffQualification,  Equipment, EquipmentGroup, EquipmentUser
+from .models import DocumentClient, DocumentTitle, Staff, StaffRole, StaffQualification,  Equipment, EquipmentGroup, EquipmentUser, EquipmentTest
 
 def admin_login(request):
     if request.method == 'POST':
@@ -222,6 +222,7 @@ def admin_client_equipment(request, id):
     )
 
     # Group equipment by EquipmentGroup
+    # Prepare the result structure
     grouped_equipment = {}
     for equipment_user in equipment_list:
         group_name = equipment_user.equipment.equipment_group.name
@@ -230,7 +231,22 @@ def admin_client_equipment(request, id):
         if group_name not in grouped_equipment:
             grouped_equipment[group_name] = []
 
-        # Gather equipment and related test data
+        # Gather equipment and latest test data
+        try:
+            latest_test = equipment_user.equipmenttest_set.latest('test_date')  # Order by 'test_date' or another date field
+            test_data = {
+                "calibrate_date": latest_test.calibrate_date,
+                "calibrate_freq": latest_test.calibrate_freq,
+                "service_date": latest_test.service_date,
+                "service_freq": latest_test.servcice_freq,
+                "inspection_date": latest_test.inspection_date,
+                "inspection_freq": latest_test.inspection_freq,
+                "test_date": latest_test.test_date,
+                "test_freq": latest_test.test_freq,
+            }
+        except EquipmentTest.DoesNotExist:
+            test_data = None  # Handle cases where no tests exist
+
         item_data = {
             "id": equipment_user.equipment.id,
             "name": equipment_user.equipment.name,
@@ -238,7 +254,7 @@ def admin_client_equipment(request, id):
             "make": equipment_user.equipment.make,
             "model": equipment_user.equipment.model,
             "serial_number": equipment_user.equipment.serial_number,
-            "tests": list(equipment_user.equipmenttest_set.all())  # Access tests from equipment_user
+            "latest_test": test_data,  # Add only the latest test
         }
 
         # Add item data to the appropriate group
@@ -251,6 +267,7 @@ def admin_client_equipment(request, id):
             for group_name, items in grouped_equipment.items()
         ]
     }
+
     return render(request, 'admin_app/client_equipment.html', context=context)
 
 # Competenecy
