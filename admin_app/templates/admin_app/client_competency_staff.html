@@ -1,0 +1,23 @@
+{% extends 'admin_app/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="card text-bg-dark" style="width: 300px;">
+    <div class="card-header">
+        <p>{{ staff.first_name }} {{ staff.last_name }} - {{ staff.staff_id }}</p>
+    </div>
+    <img src="{% static 'images/img_avatar.png' %}" class="card-img-top" style="height: 300px; width: 100%;" alt="ARC">
+    <div class="card-body">
+        <p>Role: {{ staff_role.role.role_name }}</p>
+        <p>Qualifications:</p>
+        {% for qualification in staff_qualification %}
+            <p>{{ qualification.qualification }}</p>
+            <p>{{ qualification.qualification_date }}</p>
+        {% endfor %}
+    </div>
+    <div class="card-footer"><a href="">Edit</a></div>
+</div>
+
+<a href="{% url 'admin_competency' staff.user_id %}" class="btn btn-info">Back</a>
+
+{% endblock %}

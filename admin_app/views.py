@@ -295,17 +295,33 @@ def admin_competency(request, id):
             
             staff_data.append({
                 "staff_name": f"{staff_role.staff.first_name} {staff_role.staff.last_name}",
+                "staff_id": staff_role.staff.id,
                 "qualifications": qualification_data
             })
+
         
         # Prepare the role data for the template
         data[role.role_name] = {
             "qualifications": [q.qualification_name for q in qualifications],
             "staff_data": staff_data
         }
+        print(staff_data)
 
     context = {
         'data': data,
     }
     # context = {'roles_data': roles_data, 'today': today}
     return render(request, 'admin_app/client_competency.html', context)
+
+@login_required
+def admin_competency_staff(request, id):
+    staff = Staff.objects.filter(id=id).first()
+    staff_qualification = StaffQualification.objects.filter(staff=id)
+    staff_role = StaffRole.objects.filter(staff=id).first()
+    context = {
+        "staff": staff,
+        "staff_qualification": staff_qualification,
+        "staff_role": staff_role
+    }
+    print(context)
+    return render(request, 'admin_app/client_competency_staff.html', context=context)

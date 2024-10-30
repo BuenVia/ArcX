@@ -18,7 +18,7 @@
             <tbody>
                 {% for staff in role_data.staff_data %}
                     <tr>
-                        <td>{{ staff.staff_name }}</td>
+                        <td><a href="{% url 'admin_competency_staff' staff.staff_id %}">{{ staff.staff_name }}</a></td>
                         {% for qualification_name in role_data.qualifications %}
                             <td>
                                 {% if staff.qualifications|get_item:qualification_name %}

@@ -22,4 +22,5 @@ urlpatterns = [
     path('equipment/<int:id>/', views.admin_client_equipment, name='admin_equipment'),
     # Competency - CRUD
     path('competency/<int:id>/', views.admin_competency, name='admin_competency'),
+    path('competency/staff/<int:id>/', views.admin_competency_staff, name='admin_competency_staff'),
 ]
