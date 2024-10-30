@@ -2,19 +2,25 @@
 
 {% block content %}
 
+<h2>{{ user.first_name }}</h2>
 
-<ul>
-    {% for pdf in user_pdfs %}
-        <li>
-            <span>{{ pdf.user.username }}</span>
-            <a href="{{ pdf.pdf.url }}" download>{{ pdf.pdf.name }}</a>
-            (Uploaded on {{ pdf.uploaded_at }})
-            <a href="{% url 'admin_delete_pdf' pdf.id %}" class="delete-button">Delete</a>
-        </li>
-    {% empty %}
-        <li>No PDFs available</li>
-    {% endfor %}
-</ul>
+<table class="table table-dark table-striped table-bordered">
+    <thead>
+        <th>Document</th>
+        <th>View</th>
+        <th>Date</th>
+    </thead>
+    <tbody>
+        {% for doc in documents %}
+            <tr>
+                <td>{{ doc.document.title }}</td>
+                <td>{% if uploaded %}<a href="/uploads/{{ doc.file }}"></a>{% else %}N/A{% endif %}</td>
+                <td>{% if uploaded %}{{ doc.upload_date }}{% else %}N/A{% endif %}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
 
 
 {% endblock content %}
