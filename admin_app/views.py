@@ -7,8 +7,10 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.db.models import Prefetch, Min
+from django.forms import modelformset_factory
+from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import UserRegistrationForm, AddUserForm, EquipmentForm
+from .forms import UserRegistrationForm, AddUserForm, EquipmentForm, StaffForm, StaffRoleForm, StaffQualificationForm
 from .models import DocumentClient, DocumentTitle, Staff, StaffRole, RoleNames, Qualifications, StaffQualification, Equipment, EquipmentGroup, EquipmentUser, EquipmentTest
 
 def admin_login(request):
@@ -20,22 +22,22 @@ def admin_login(request):
         if user is not None:
             if user.is_superuser:  # Check if the user is a superuser
                 login(request, user)
-                return redirect('dashboard')  # Redirect to the dashboard
+                return redirect('aa_dashboard')  # Redirect to the dashboard
             else:
                 # Display error message if the user is not a superuser
                 messages.error(request, "You don't have sufficient privileges to access this page.")
-                return redirect('admin_login')  # Stay on login page
+                return redirect('aa_login')  # Stay on login page
         else:
             # Invalid credentials message
             messages.error(request, "Invalid username or password")
-            return redirect('admin_login')
+            return redirect('aa_login')
     
-    return render(request, 'admin_app/login.html')  # Render the login page
+    return render(request, 'admin_app/aa_login.html')  # Render the login page
 
 
 def admin_logout(request):
     logout(request)
-    return redirect('admin_login')  # Redirect to 'manager/' path after logout
+    return redirect('aa_login')  # Redirect to 'manager/' path after logout
 
 
 @login_required
@@ -43,6 +45,7 @@ def dashboard(request):
     if request.user.is_superuser:
         return render(request, 'admin_app/dashboard.html')  # Render dashboard page for superuser
     return redirect('')  # If the user is not a superuser, redirect to home
+
 
 @login_required
 def clients_page(request):
@@ -169,7 +172,7 @@ def admin_all_equipment(request):
         for group, items in grouped_equipment.items()
     ]
     context = {'equipment_list': equipment_list}
-    return render(request, 'admin_app/admin_add_equipment.html', context=context)
+    return render(request, 'admin_app/equipment/aa_equipment_add.html', context=context)
 
 @login_required
 def admin_all_equipment_new(request):
@@ -181,7 +184,7 @@ def admin_all_equipment_new(request):
     else:
         form = EquipmentForm()
     
-    return render(request, 'admin_app/admin_equipment_add_edit.html', {'form': form, 'is_edit': False})
+    return render(request, 'admin_app/equipment/aa_equipment_add.html', {'form': form, 'is_edit': False})
 
 @login_required
 def admin_all_equipment_edit(request, id):
@@ -194,7 +197,7 @@ def admin_all_equipment_edit(request, id):
     else:
         form = EquipmentForm(instance=equipment)
     
-    return render(request, 'admin_app/admin_equipment_add_edit.html', {'form': form, 'is_edit': True})
+    return render(request, 'admin_app/equipement/aa_equipment_edit.html', {'form': form, 'is_edit': True})
 
 @login_required
 def admin_all_equipment_delete(request, id):
@@ -203,7 +206,7 @@ def admin_all_equipment_delete(request, id):
         equipment.delete()
         return redirect('admin_all_equipment')  # Redirect to the list view after deletion
 
-    return render(request, 'admin_app/admin_delete_equipment.html', {'equipment': equipment})
+    return render(request, 'admin_app/equipment/aa_equipment_delete.html', {'equipment': equipment})
 
 @login_required
 def admin_client_equipment(request, id):
@@ -265,7 +268,7 @@ def admin_client_equipment(request, id):
         'user': user[0]
     }
 
-    return render(request, 'admin_app/client_equipment.html', context=context)
+    return render(request, 'admin_app/equipment/aa_equipment.html', context=context)
 
 # Competenecy
 @login_required
@@ -309,9 +312,11 @@ def admin_competency(request, id):
 
     context = {
         'data': data,
+        'user': id
     }
+    print(context)
     # context = {'roles_data': roles_data, 'today': today}
-    return render(request, 'admin_app/client_competency.html', context)
+    return render(request, 'admin_app/competency/aa_competency.html', context)
 
 @login_required
 def admin_competency_staff(request, id):
@@ -324,4 +329,91 @@ def admin_competency_staff(request, id):
         "staff_role": staff_role
     }
     print(context)
-    return render(request, 'admin_app/client_competency_staff.html', context=context)
+    return render(request, 'admin_app/competency/aa_competency_staff.html', context=context)
+
+@login_required
+def admin_competency_staff_add(request, user_id):
+    user = get_object_or_404(User, id=user_id)  # Fetch the User based on the passed user_id
+    StaffQualificationFormSet = modelformset_factory(
+        StaffQualification,
+        form=StaffQualificationForm,
+        extra=1,  # Adjust extra forms as needed
+    )
+    if request.method == 'POST':
+        staff_form = StaffForm(request.POST)
+        role_form = StaffRoleForm(request.POST)
+        qualification_formset = StaffQualificationFormSet(request.POST, prefix='qualification')
+
+        if all([staff_form.is_valid(), role_form.is_valid(), qualification_formset.is_valid()]):
+            staff = staff_form.save(commit=False)
+            staff.user = user
+            staff.save()
+
+            role = role_form.save(commit=False)
+            role.staff = staff
+            role.save()
+
+            for qualification_form in qualification_formset:
+                qualification = qualification_form.save(commit=False)
+                qualification.staff = staff
+                qualification.save()
+
+            return redirect('staff_list')  # Redirect to a relevant page
+    else:
+        staff_form = StaffForm()
+        role_form = StaffRoleForm()
+        qualification_formset = StaffQualificationFormSet(prefix='qualification')
+
+    context = {
+        'staff_form': staff_form,
+        'role_form': role_form,
+        'qualification_formset': qualification_formset,
+        'user': user,
+    }
+    return render(request, 'admin_app/competency/aa_competency_staff_add_edit.html', context=context)
+
+@login_required
+def add_or_edit_staff(request, user_id, staff_id=None):
+    user = get_object_or_404(User, id=user_id)
+    StaffRoleFormSet = modelformset_factory(StaffRole, form=StaffRoleForm, extra=1, can_delete=True)
+    StaffQualificationFormSet = modelformset_factory(StaffQualification, form=StaffQualificationForm, extra=1, can_delete=True)
+
+    if staff_id:
+        staff = get_object_or_404(Staff, id=staff_id, user=user)
+        staff_form = StaffForm(request.POST or None, instance=staff)
+        role_formset = StaffRoleFormSet(request.POST or None, queryset=staff.staffrole_set.all())
+        qualification_formset = StaffQualificationFormSet(request.POST or None, queryset=staff.staffqualification_set.all())
+    else:
+        staff_form = StaffForm(request.POST or None)
+        role_formset = StaffRoleFormSet(request.POST or None, queryset=StaffRole.objects.none())
+        qualification_formset = StaffQualificationFormSet(request.POST or None, queryset=StaffQualification.objects.none())
+
+    if request.method == 'POST':
+        if staff_form.is_valid() and role_formset.is_valid() and qualification_formset.is_valid():
+            # Save staff
+            new_staff = staff_form.save(commit=False)
+            new_staff.user = user
+            new_staff.save()
+
+            # Save roles
+            for form in role_formset:
+                role = form.save(commit=False)
+                role.staff = new_staff
+                role.save()
+                form.save_m2m()
+
+            # Save qualifications
+            for form in qualification_formset:
+                qualification = form.save(commit=False)
+                qualification.staff = new_staff
+                qualification.save()
+                form.save_m2m()
+
+            return redirect('success_page')  # Change to appropriate redirect
+
+    context = {
+        'staff_form': staff_form,
+        'role_formset': role_formset,
+        'qualification_formset': qualification_formset,
+    }
+    return render(request, 'admin_app/competency/aa_competency_staff_add_edit.html', context=context)

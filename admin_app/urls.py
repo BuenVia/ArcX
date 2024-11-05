@@ -2,9 +2,9 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.admin_login, name='admin_login'),
-    path('logout/', views.admin_logout, name='admin_logout'),
-    path('dashboard/', views.dashboard, name='dashboard'),
+    path('', views.admin_login, name='aa_login'),
+    path('logout/', views.admin_logout, name='aa_logout'),
+    path('dashboard/', views.dashboard, name='aa_dashboard'),
     # Clients - CRUD
     path('clients/', views.clients_page, name='clients'),
     path('clients/new', views.client_new, name='client_new'),
@@ -23,4 +23,6 @@ urlpatterns = [
     # Competency - CRUD
     path('competency/<int:id>/', views.admin_competency, name='admin_competency'),
     path('competency/staff/<int:id>/', views.admin_competency_staff, name='admin_competency_staff'),
+    path('competency/staff/add/<int:user_id>', views.add_or_edit_staff, name='admin_competency_staff_add'),
+    path('competency/staff/edit/<int:user_id>/<int:staff_id>/', views.add_or_edit_staff, name='admin_competency_staff_edit'),
 ]

@@ -1,7 +1,9 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from .models import Equipment
+from .models import Equipment, Staff, StaffRole, StaffQualification
+from django.forms import inlineformset_factory
+
 
 class UserRegistrationForm(forms.Form):
     username = forms.CharField(max_length=100)
@@ -46,3 +48,26 @@ class EquipmentForm(forms.ModelForm):
     class Meta:
         model = Equipment
         fields = ['name', 'item_number', 'make', 'model', 'serial_number', 'equipment_group']
+
+class StaffForm(forms.ModelForm):
+    class Meta:
+        model = Staff
+        fields = ['first_name', 'last_name', 'staff_id', 'user']
+
+class StaffRoleForm(forms.ModelForm):
+    class Meta:
+        model = StaffRole
+        fields = ['role']
+
+class StaffQualificationForm(forms.ModelForm):
+    class Meta:
+        model = StaffQualification
+        fields = ['qualification', 'qualification_date']
+
+# Create formsets for inline use
+StaffRoleFormSet = inlineformset_factory(
+    Staff, StaffRole, form=StaffRoleForm, extra=1, can_delete=True
+)
+StaffQualificationFormSet = inlineformset_factory(
+    Staff, StaffQualification, form=StaffQualificationForm, extra=1, can_delete=True
+)

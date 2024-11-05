@@ -6,6 +6,9 @@
 <a href="" class="btn btn-primary">Add</a>
 
 <div class="container mt-5">
+
+    <a href="{% url "admin_competency_staff_add" user  %}" class="btn btn-info">Add</a>
+
     {% for role_name, role_data in data.items %}
         <h2>{{ role_name }}</h2>
         <table class="table table-dark table-striped table-bordered">
