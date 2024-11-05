@@ -1,0 +1,37 @@
+*, *::after, *::before {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    background-color: #313131;
+    color: #eee;
+}
+
+.main-body {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    width: 100%;
+    padding: 1em;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.logo {
+    color: rgb(228, 228, 28);
+    font-size: 18px;
+}
+
+.dashboard {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}

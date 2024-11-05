@@ -4,9 +4,32 @@
 
 <h1>Admin Dashboard</h1>
 
-<a href="{% url 'clients' %}" class="btn btn-info">View Clients</a>
-<br>
-<a href="{% url 'admin_all_equipment' %}" class="btn btn-info">View Equipment List</a>
+<div class="row">
+
+    <div class="col">
+
+    <div class="card text-bg-dark mb-3" style="width: 100%;">
+        <div class="card-header"></div>
+        <div class="card-body">
+            <a href="{% url 'clients' %}" class="">View Clients</a>
+        </div>
+        <div class="card-footer"></div>
+    </div>
+    </div>
+    
+    <div class="col">
+
+    <div class="card text-bg-dark mb-3" style="width: 100%;">
+        <div class="card-header"></div>
+        <div class="card-body">
+            <a href="{% url 'admin_all_equipment' %}" class="">View Equipment List</a>
+        </div>
+        <div class="card-footer"></div>
+    </div>
+</div>
+
+</div>
+</div>
 
 
 {% endblock content %}
