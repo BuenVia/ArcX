@@ -172,7 +172,7 @@ def admin_all_equipment(request):
         for group, items in grouped_equipment.items()
     ]
     context = {'equipment_list': equipment_list}
-    return render(request, 'admin_app/admin_add_equipment.html', context=context)
+    return render(request, 'admin_app/equipment/aa_equipment_add.html', context=context)
 
 @login_required
 def admin_all_equipment_new(request):
@@ -184,7 +184,7 @@ def admin_all_equipment_new(request):
     else:
         form = EquipmentForm()
     
-    return render(request, 'admin_app/admin_equipment_add_edit.html', {'form': form, 'is_edit': False})
+    return render(request, 'admin_app/equipment/aa_equipment_add.html', {'form': form, 'is_edit': False})
 
 @login_required
 def admin_all_equipment_edit(request, id):
@@ -197,7 +197,7 @@ def admin_all_equipment_edit(request, id):
     else:
         form = EquipmentForm(instance=equipment)
     
-    return render(request, 'admin_app/admin_equipment_add_edit.html', {'form': form, 'is_edit': True})
+    return render(request, 'admin_app/equipement/aa_equipment_edit.html', {'form': form, 'is_edit': True})
 
 @login_required
 def admin_all_equipment_delete(request, id):
@@ -206,7 +206,7 @@ def admin_all_equipment_delete(request, id):
         equipment.delete()
         return redirect('admin_all_equipment')  # Redirect to the list view after deletion
 
-    return render(request, 'admin_app/admin_delete_equipment.html', {'equipment': equipment})
+    return render(request, 'admin_app/equipment/aa_equipment_delete.html', {'equipment': equipment})
 
 @login_required
 def admin_client_equipment(request, id):
@@ -268,7 +268,7 @@ def admin_client_equipment(request, id):
         'user': user[0]
     }
 
-    return render(request, 'admin_app/client_equipment.html', context=context)
+    return render(request, 'admin_app/equipment/aa_equipment.html', context=context)
 
 # Competenecy
 @login_required
@@ -316,7 +316,7 @@ def admin_competency(request, id):
     }
     print(context)
     # context = {'roles_data': roles_data, 'today': today}
-    return render(request, 'admin_app/client_competency.html', context)
+    return render(request, 'admin_app/competency/aa_competency.html', context)
 
 @login_required
 def admin_competency_staff(request, id):
@@ -329,7 +329,7 @@ def admin_competency_staff(request, id):
         "staff_role": staff_role
     }
     print(context)
-    return render(request, 'admin_app/client_competency_staff.html', context=context)
+    return render(request, 'admin_app/competency/aa_competency_staff.html', context=context)
 
 @login_required
 def admin_competency_staff_add(request, user_id):
@@ -370,8 +370,7 @@ def admin_competency_staff_add(request, user_id):
         'qualification_formset': qualification_formset,
         'user': user,
     }
-    return render(request, 'admin_app/client_competency_staff_add_edit.html', context=context)
-
+    return render(request, 'admin_app/competency/aa_competency_staff_add_edit.html', context=context)
 
 @login_required
 def add_or_edit_staff(request, user_id, staff_id=None):
@@ -417,4 +416,4 @@ def add_or_edit_staff(request, user_id, staff_id=None):
         'role_formset': role_formset,
         'qualification_formset': qualification_formset,
     }
-    return render(request, 'admin_app/client_competency_staff_add_edit.html', context=context)
+    return render(request, 'admin_app/competency/aa_competency_staff_add_edit.html', context=context)
