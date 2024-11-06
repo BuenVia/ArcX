@@ -43,7 +43,7 @@ def admin_logout(request):
 @login_required
 def dashboard(request):
     if request.user.is_superuser:
-        return render(request, 'admin_app/dashboard.html')  # Render dashboard page for superuser
+        return render(request, 'admin_app/aa_dashboard.html')  # Render dashboard page for superuser
     return redirect('')  # If the user is not a superuser, redirect to home
 
 
@@ -51,7 +51,7 @@ def dashboard(request):
 def clients_page(request):
     if request.user.is_superuser:
         users = User.objects.all()
-        return render(request, 'admin_app/clients.html', { "users": users })  # Render dashboard page for superuser
+        return render(request, 'admin_app/clients/aa_clients.html', { "users": users })  # Render dashboard page for superuser
     return redirect('')  # If the user is not a superuser, redirect to home
 
 @login_required
@@ -67,7 +67,7 @@ def client_edit(request, id):
             return redirect('clients')
         else:
             user = User.objects.get(id=id)
-            return render(request, 'admin_app/client_edit.html', { "user": user })  # Render dashboard page for superuser
+            return render(request, 'admin_app/clients/aa_client_edit.html', { "user": user })  # Render dashboard page for superuser
     return redirect('')  # If the user is not a superuser, redirect to home
 
 @login_required
@@ -112,7 +112,7 @@ def client_new(request):
         else:
             form = AddUserForm()
 
-        return render(request, 'admin_app/client_new.html', {'form': form})
+        return render(request, 'admin_app/clients/aa_client_new.html', {'form': form})
 
 # Documentation
 @login_required
@@ -121,7 +121,7 @@ def client_document_view(request, id):
         user = User.objects.filter(id=id).first()
         documents = DocumentClient.objects.filter(user=id)
         print(documents[0].file)
-        return render(request, 'admin_app/client_docs.html', {"documents": documents, 'user': user})
+        return render(request, 'admin_app/documentation/aa_client_docs.html', {"documents": documents, 'user': user})
 
 @login_required
 def document_view(request):
