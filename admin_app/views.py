@@ -34,66 +34,26 @@ def admin_login(request):
     
     return render(request, 'admin_app/aa_login.html')  # Render the login page
 
-
 def admin_logout(request):
     logout(request)
     return redirect('aa_login')  # Redirect to 'manager/' path after logout
 
-
 @login_required
-def dashboard(request):
+def aa_dashboard(request):
     if request.user.is_superuser:
         return render(request, 'admin_app/aa_dashboard.html')  # Render dashboard page for superuser
     return redirect('')  # If the user is not a superuser, redirect to home
 
-
+# Client Controll
 @login_required
-def clients_page(request):
+def aa_clients_list(request):
     if request.user.is_superuser:
         users = User.objects.all()
         return render(request, 'admin_app/clients/aa_clients.html', { "users": users })  # Render dashboard page for superuser
     return redirect('')  # If the user is not a superuser, redirect to home
 
 @login_required
-def client_edit(request, id):
-    if request.user.is_superuser:
-        if request.method == "POST":
-            user = get_object_or_404(User, id=id)
-            user.first_name = request.POST.get('firstname')
-            user.last_name = request.POST.get('lastname')
-            user.email = request.POST.get('email')
-            user.username = request.POST.get('username')
-            user.save()
-            return redirect('clients')
-        else:
-            user = User.objects.get(id=id)
-            return render(request, 'admin_app/clients/aa_client_edit.html', { "user": user })  # Render dashboard page for superuser
-    return redirect('')  # If the user is not a superuser, redirect to home
-
-@login_required
-def client_pw_edit(request, id):
-    if request.user.is_superuser:
-        if request.method == 'POST':
-            form = UserRegistrationForm(request.POST)
-            password = request.POST.get('password')
-            repeat_password = request.POST.get('repeat_password')
-            print(request.POST.get('password'))
-            print(request.POST.get('repeat_password'))
-            if password == repeat_password:
-                if form.is_valid():
-                    user = user_form.save()
-                    user.set_password('unencrypted_password')  # replace with your real password
-                    user.save()
-                    # Process the form data, save user, etc.
-                    return redirect('clients')
-        else:
-            form = UserRegistrationForm()
-
-        return render(request, 'admin_app/client_pw_edit.html', {'form': form})
-    return redirect('')  # If the user is not a superuser, redirect to home
-
-@login_required
-def client_new(request):
+def aa_client_create(request):
     if request.user.is_superuser:
         if request.method == 'POST':
             form = AddUserForm(request.POST)
@@ -112,7 +72,60 @@ def client_new(request):
         else:
             form = AddUserForm()
 
-        return render(request, 'admin_app/clients/aa_client_new.html', {'form': form})
+        return render(request, 'admin_app/clients/aa_client_create.html', {'form': form})
+
+def aa_client_read(request, id):
+    user = User.objects.filter(id=id)
+    context = {'user': user}
+    return render(request, 'admin_app/clients/aa_client_read.html', context)
+
+@login_required
+def aa_client_update(request, id):
+    if request.user.is_superuser:
+        if request.method == "POST":
+            user = get_object_or_404(User, id=id)
+            user.first_name = request.POST.get('firstname')
+            user.last_name = request.POST.get('lastname')
+            user.email = request.POST.get('email')
+            user.username = request.POST.get('username')
+            user.save()
+            return redirect('clients')
+        else:
+            user = User.objects.get(id=id)
+            return render(request, 'admin_app/clients/aa_client_update.html', { "user": user })  # Render dashboard page for superuser
+    return redirect('')  # If the user is not a superuser, redirect to home
+
+@login_required
+def aa_client_update_pw(request, id):
+    if request.user.is_superuser:
+        if request.method == 'POST':
+            form = UserRegistrationForm(request.POST)
+            password = request.POST.get('password')
+            repeat_password = request.POST.get('repeat_password')
+            print(request.POST.get('password'))
+            print(request.POST.get('repeat_password'))
+            if password == repeat_password:
+                if form.is_valid():
+                    user = user_form.save()
+                    user.set_password('unencrypted_password')  # replace with your real password
+                    user.save()
+                    # Process the form data, save user, etc.
+                    return redirect('clients')
+        else:
+            form = UserRegistrationForm()
+
+        return render(request, 'admin_app/aa_client_update_pw.html', {'form': form})
+    return redirect('')  # If the user is not a superuser, redirect to home
+
+def aa_client_delete(request, id):
+    user = User.objects.filter(id=id)
+    context = {'user': user}
+    return render(request, 'admin_app/clients/aa_client_delete.html', context)
+
+
+
+
+
 
 # Documentation
 @login_required

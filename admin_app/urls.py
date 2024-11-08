@@ -4,13 +4,14 @@ from . import views
 urlpatterns = [
     path('', views.admin_login, name='aa_login'),
     path('logout/', views.admin_logout, name='aa_logout'),
-    path('dashboard/', views.dashboard, name='aa_dashboard'),
+    path('dashboard/', views.aa_dashboard, name='aa_dashboard'),
     # Clients - CRUD
-    path('clients/', views.clients_page, name='clients'),
-    path('clients/new', views.client_new, name='client_new'),
-    path('clients/<id>', views.client_edit, name='client_edit'),
-    path('client_docs/<id>', views.client_document_view, name='client_docs'),
-    path('clients/password/<id>', views.client_pw_edit, name='client_pw_edit'),
+    path('clients/', views.aa_clients_list, name='aa_clients'),
+    path('clients/create', views.aa_client_create, name='aa_client_create'),
+    path('clients/read/<int:id>', views.aa_client_read, name='aa_client_read'),
+    path('clients/update/<int:id>', views.aa_client_update, name='aa_client_update'),
+    path('clients/delete/<int:id>', views.aa_client_delete, name='aa_client_delete'),
+    path('clients/password/<int:id>', views.aa_client_update_pw, name='aa_client_pw_edit'),
     # Documents - CRUD
     path('documents/', views.document_view, name='admin_documents'),
     path('delete_pdf/<int:pdf_id>/', views.delete_pdf, name='admin_delete_pdf'),

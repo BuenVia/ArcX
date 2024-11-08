@@ -1,0 +1,11 @@
+{% extends "admin_app/base.html" %}
+
+{% block content %}
+
+<h1>Client Read</h1>
+
+<a href="{% url "aa_client_update" user.id %}">Edit</a>
+<br />
+<a href="{% url "aa_client_delete" user.id %}">Delete</a>
+
+{% endblock content %}
