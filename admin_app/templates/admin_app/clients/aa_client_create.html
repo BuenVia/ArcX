@@ -1,6 +1,16 @@
-<!-- add_user.html -->
+{% extends "admin_app/base.html" %}
+
+{% block content %}
+
 <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Add User</button>
+    <h3>User Information</h3>
+    {{ user_form.as_p }}
+    
+    <h3>Profile Information</h3>
+    {{ profile_form.as_p }}
+    
+    <button type="submit" class="btn btn-primary">Create Client</button>
 </form>
+
+{% endblock content %}

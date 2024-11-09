@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from .models import Equipment, Staff, StaffRole, StaffQualification
+from .models import Equipment, Staff, StaffRole, StaffQualification, UserProfile
 from django.forms import inlineformset_factory
 
 
@@ -42,7 +42,12 @@ class AddUserForm(forms.ModelForm):
             raise ValidationError("Passwords do not match.")
 
         return cleaned_data
-    
+
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ["business_name", "address_one", "address_two", "town", "county", "postcode", "telephone"]
+
 
 class EquipmentForm(forms.ModelForm):
     class Meta:

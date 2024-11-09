@@ -10,8 +10,8 @@ from django.db.models import Prefetch, Min
 from django.forms import modelformset_factory
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import UserRegistrationForm, AddUserForm, EquipmentForm, StaffForm, StaffRoleForm, StaffQualificationForm
-from .models import DocumentClient, DocumentTitle, Staff, StaffRole, RoleNames, Qualifications, StaffQualification, Equipment, EquipmentGroup, EquipmentUser, EquipmentTest
+from .forms import UserRegistrationForm, AddUserForm, UserProfileForm, EquipmentForm, StaffForm, StaffRoleForm, StaffQualificationForm
+from .models import UserProfile, DocumentClient, DocumentTitle, Staff, StaffRole, RoleNames, Qualifications, StaffQualification, Equipment, EquipmentGroup, EquipmentUser, EquipmentTest
 
 def admin_login(request):
     if request.method == 'POST':
@@ -56,28 +56,44 @@ def aa_clients_list(request):
 def aa_client_create(request):
     if request.user.is_superuser:
         if request.method == 'POST':
-            form = AddUserForm(request.POST)
-            if form.is_valid():
+            user_form = AddUserForm(request.POST)
+            profile_form = UserProfileForm(request.POST)
+
+            if user_form.is_valid() and profile_form.is_valid():
                 # Create the user object without saving it yet
-                user = form.save(commit=False)
+                user = user_form.save(commit=False)
 
                 # Set the password using set_password() to hash it securely
-                password = form.cleaned_data['password']
+                password = user_form.cleaned_data['password']
                 user.set_password(password)
 
-                # Save the user object with the password
+                # Save the user object
                 user.save()
 
-                return redirect('clients')  # Redirect after successful user creation
-        else:
-            form = AddUserForm()
+                # Create the profile object and link it to the user
+                profile = profile_form.save(commit=False)
+                profile.user = user
+                profile.save()
 
-        return render(request, 'admin_app/clients/aa_client_create.html', {'form': form})
+                return redirect('aa_clients')  # Redirect after successful user creation
+        else:
+            user_form = AddUserForm()
+            profile_form = UserProfileForm()
+
+        return render(
+            request,
+            'admin_app/clients/aa_client_create.html',
+            {
+                'user_form': user_form,
+                'profile_form': profile_form,
+            },
+        )
 
 @login_required
 def aa_client_read(request, id):
     user = User.objects.filter(id=id).first()
-    context = {'user': user}
+    user_profile = UserProfile.objects.filter(user_id=id).first()
+    context = {'user': user, 'user_profile': user_profile}
     return render(request, 'admin_app/clients/aa_client_read.html', context)
 
 @login_required
