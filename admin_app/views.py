@@ -74,8 +74,9 @@ def aa_client_create(request):
 
         return render(request, 'admin_app/clients/aa_client_create.html', {'form': form})
 
+@login_required
 def aa_client_read(request, id):
-    user = User.objects.filter(id=id)
+    user = User.objects.filter(id=id).first()
     context = {'user': user}
     return render(request, 'admin_app/clients/aa_client_read.html', context)
 
@@ -117,6 +118,7 @@ def aa_client_update_pw(request, id):
         return render(request, 'admin_app/aa_client_update_pw.html', {'form': form})
     return redirect('')  # If the user is not a superuser, redirect to home
 
+@login_required
 def aa_client_delete(request, id):
     user = User.objects.filter(id=id)
     context = {'user': user}
