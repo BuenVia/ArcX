@@ -4,4 +4,14 @@
 
 <h1>Client Delete</h1>
 
+<p>You are about to delete {{user.username}}.</p>
+<p>Please write {{user.username}} in the field to confirm.</p>
+<form method="POST">
+    {% csrf_token %}
+    <input type="text" name="name" />
+    <button type="submit" class="btn btn-info">DELETE</button>
+</form>
+    
+<a href="{% url "aa_client_read" user.id %}" class="btn btn-primary">Cancel</a>
+
 {% endblock content %}

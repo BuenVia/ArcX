@@ -4,22 +4,16 @@
 
 <h3>Edit Client</h3>
 
-<form class="client__form" method="POST" action="">
+<form method="post">
     {% csrf_token %}
-    <label class="form-label">ID</label>
-    <input class="form-control" name="id" value="{{ user.id }}" disabled />
-    <label class="form-label">Username</label>
-    <input class="form-control" name="username" value="{{ user.username }}" />
-    <label class="form-label">Email</label>
-    <input class="form-control" name="email" value="{{ user.email }}" />
-    <label class="form-label">Firstname</label>
-    <input class="form-control" name="firstname" value="{{ user.first_name }}" />
-    <label class="form-label">Lastname</label>
-    <input class="form-control" name="lastname" value="{{ user.last_name }}" />
-    <input type="submit" value="Save" />
-    <a href="{% url "aa_clients" %}">Back</a>
+    <h3>User Information</h3>
+    {{ user_form.as_p }}
+    
+    <h3>Profile Information</h3>
+    {{ profile_form.as_p }}
+    
+    <button type="submit" class="btn btn-primary mt-3">Save Changes</button>
 </form>
 
-
-<button><a href="password/{{ user.id }}">Edit</a></button>
+<a href="{% url "aa_client_delete" id %}" class="btn btn-danger">Delete</a>
 {% endblock content %}

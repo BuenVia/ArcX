@@ -10,7 +10,7 @@ from django.db.models import Prefetch, Min
 from django.forms import modelformset_factory
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import UserRegistrationForm, AddUserForm, UserProfileForm, EquipmentForm, StaffForm, StaffRoleForm, StaffQualificationForm
+from .forms import UserForm, UserRegistrationForm, AddUserForm, UserProfileForm, EquipmentForm, StaffForm, StaffRoleForm, StaffQualificationForm
 from .models import UserProfile, DocumentClient, DocumentTitle, Staff, StaffRole, RoleNames, Qualifications, StaffQualification, Equipment, EquipmentGroup, EquipmentUser, EquipmentTest
 
 def admin_login(request):
@@ -99,17 +99,27 @@ def aa_client_read(request, id):
 @login_required
 def aa_client_update(request, id):
     if request.user.is_superuser:
-        if request.method == "POST":
-            user = get_object_or_404(User, id=id)
-            user.first_name = request.POST.get('firstname')
-            user.last_name = request.POST.get('lastname')
-            user.email = request.POST.get('email')
-            user.username = request.POST.get('username')
-            user.save()
-            return redirect('clients')
+        user = get_object_or_404(User, id=id)
+        profile = get_object_or_404(UserProfile, user=user)
+
+        if request.method == 'POST':
+            user_form = UserForm(request.POST, instance=user)
+            profile_form = UserProfileForm(request.POST, instance=profile)
+
+            if user_form.is_valid() and profile_form.is_valid():
+                user_form.save()
+                profile_form.save()
+                return redirect('aa_client_read', id=id)  # Redirect to a success page or user dashboard
         else:
-            user = User.objects.get(id=id)
-            return render(request, 'admin_app/clients/aa_client_update.html', { "user": user })  # Render dashboard page for superuser
+            user_form = UserForm(instance=user)
+            profile_form = UserProfileForm(instance=profile)
+
+        context = {
+            'user_form': user_form,
+            'profile_form': profile_form,
+            'id': id
+        }
+        return render(request, 'admin_app/clients/aa_client_update.html', context)
     return redirect('')  # If the user is not a superuser, redirect to home
 
 @login_required
@@ -136,7 +146,15 @@ def aa_client_update_pw(request, id):
 
 @login_required
 def aa_client_delete(request, id):
-    user = User.objects.filter(id=id)
+    user = User.objects.filter(id=id).first()
+    if request.method == "POST":
+        if request.POST.get('name') == user.username:
+            user.delete()
+            return redirect('aa_clients')
+        else:
+            print("huh?")
+            return redirect('aa_client_update', id=user.id)
+            
     context = {'user': user}
     return render(request, 'admin_app/clients/aa_client_delete.html', context)
 

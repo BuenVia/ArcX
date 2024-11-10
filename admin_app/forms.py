@@ -5,6 +5,11 @@ from .models import Equipment, Staff, StaffRole, StaffQualification, UserProfile
 from django.forms import inlineformset_factory
 
 
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'email']
+
 class UserRegistrationForm(forms.Form):
     username = forms.CharField(max_length=100)
     email = forms.EmailField()

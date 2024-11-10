@@ -2,21 +2,42 @@
 
 {% block content %}
 
-<h1>Client Read</h1>
+ <h1>{{ user_profile.business_name }}</h1>
 
-<div class="card text-bg-dark mb-3">
-    <div class="card-body">
-        <p>Username: {{ user.username }}</p>
-        <p>First Name: {{ user.first_name }}</p>
-        <p>Last Name: {{ user.last_name }}</p>
-    </div>
-    <div class="card-body">
-        {{ user_profile }}
-    </div>
-</div>
+    <div class="aa_client_read">
+            <!-- Contact Details Card -->
+            <div class=" m-3">
+                <div class="card-header text-uppercase fw-bold">
+                    Contact Details
+                </div>
+                <div class="card-body">
+                    <p>{{ user_profile.business_name }}</p>
+                    <p>{{ user_profile.address_one }}</p>
+                    <p>{{ user_profile.address_two }}</p>
+                    <p>{{ user_profile.town }}</p>
+                    <p>{{ user_profile.county }}</p>
+                    <p>{{ user_profile.postcode }}</p>
+                    <p>Tel: {{ user_profile.telephone }}</p>
+                    <p>Email: {{ user.email }}</p>
+                </div>
+            </div>
 
-<a href="{% url "aa_client_update" user.id %}">Edit</a>
-<br />
-<a href="{% url "aa_client_delete" user.id %}">Delete</a>
+            <!-- Personal Details Card -->
+            <div class="card text-bg-dark m-3">
+                <div class="card-header text-uppercase fw-bold">
+                    Personal Details
+                </div>
+                <div class="card-body">
+                    <p class="mb-2"><strong>First Name:</strong> {{ user.first_name }}</p>
+                    <p class="mb-2"><strong>Last Name:</strong> {{ user.last_name }}</p>
+                    <p class="mb-2"><strong>Username:</strong> {{ user.username }}</p>
+                    <p class="mb-2"><strong>Date Joined:</strong> {{ user.date_joined }}</p>
+                    <p class="mb-2"><strong>Last Login:</strong> {{ user.last_login }}</p>
+                </div>
+            </div>
+    </div>
+
+<a class="btn btn-warning" href="{% url "aa_client_update" user.id %}">Edit</a>
+
 
 {% endblock content %}
