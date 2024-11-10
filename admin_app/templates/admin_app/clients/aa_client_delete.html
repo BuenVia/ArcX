@@ -2,16 +2,25 @@
 
 {% block content %}
 
-<h1>Client Delete</h1>
+<div class="card text-bg-dark m-3 text-center">
 
-<p>You are about to delete {{user.username}}.</p>
-<p>Please write {{user.username}} in the field to confirm.</p>
-<form method="POST">
-    {% csrf_token %}
-    <input type="text" name="name" />
-    <button type="submit" class="btn btn-info">DELETE</button>
-</form>
-    
-<a href="{% url "aa_client_read" user.id %}" class="btn btn-primary">Cancel</a>
+    <div class="card-header">
+        <h1 class="h_text">Client Delete</h1>
+    </div>
+    <div class="card-body">
+        <p>You are about to delete <span class="h_text">{{user.username}}</span>.</p>
+        <p>Please write <span class="text-danger">{{user.username}}</span> in the input field to confirm.</p>
+        <form method="POST" class="p-3">
+            {% csrf_token %}
+            <input type="text" name="name" />
+            <button type="submit" class="btn btn-danger">DELETE</button>
+        </form>
+    </div>
+    <div class="card-footer">
+        <a href="{% url "aa_client_read" user.id %}" class="btn btn-primary">Cancel</a>
+    </div>
+        
+</div>
+
 
 {% endblock content %}

@@ -91,10 +91,12 @@ def aa_client_create(request):
 
 @login_required
 def aa_client_read(request, id):
-    user = User.objects.filter(id=id).first()
-    user_profile = UserProfile.objects.filter(user_id=id).first()
-    context = {'user': user, 'user_profile': user_profile}
-    return render(request, 'admin_app/clients/aa_client_read.html', context)
+    if request.user.is_superuser:
+        user = User.objects.filter(id=id).first()
+        user_profile = UserProfile.objects.filter(user_id=id).first()
+        context = {'user': user, 'user_profile': user_profile}
+        return render(request, 'admin_app/clients/aa_client_read.html', context)
+    return redirect('')  # If the user is not a superuser, redirect to home
 
 @login_required
 def aa_client_update(request, id):
@@ -146,17 +148,18 @@ def aa_client_update_pw(request, id):
 
 @login_required
 def aa_client_delete(request, id):
-    user = User.objects.filter(id=id).first()
-    if request.method == "POST":
-        if request.POST.get('name') == user.username:
-            user.delete()
-            return redirect('aa_clients')
-        else:
-            print("huh?")
-            return redirect('aa_client_update', id=user.id)
-            
-    context = {'user': user}
-    return render(request, 'admin_app/clients/aa_client_delete.html', context)
+    if request.user.is_superuser:
+        user = User.objects.filter(id=id).first()
+        if request.method == "POST":
+            if request.POST.get('name') == user.username:
+                user.delete()
+                return redirect('aa_clients')
+            else:
+                return redirect('aa_client_update', id=user.id)
+                
+        context = {'user': user}
+        return render(request, 'admin_app/clients/aa_client_delete.html', context)
+    return redirect('')  # If the user is not a superuser, redirect to home
 
 
 

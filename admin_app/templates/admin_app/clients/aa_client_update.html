@@ -2,18 +2,51 @@
 
 {% block content %}
 
-<h3>Edit Client</h3>
+<h1 class="h_text text-center">Edit Client</h1>
 
+
+<div class="aa__row">
 <form method="post">
     {% csrf_token %}
-    <h3>User Information</h3>
-    {{ user_form.as_p }}
-    
-    <h3>Profile Information</h3>
-    {{ profile_form.as_p }}
-    
-    <button type="submit" class="btn btn-primary mt-3">Save Changes</button>
-</form>
+    <div class="card text-bg-dark m3">
+        <div class="container-md">
+            <div class="card-header">
+                <h3 class="h_text">User Information</h3>
+            </div>
+            <div class="card-body client__edit">
+                {{ user_form.as_p }}
+            </div>
+        </div>
+            
+        <div class="container-md">
+            <div class="card-header">
+                <h3 class="h_text">Contact Information</h3>
+            </div>
+            <div class="card-body client__edit">
+                {{ profile_form.as_p }}
+            </div>
+        </div>
 
-<a href="{% url "aa_client_delete" id %}" class="btn btn-danger">Delete</a>
+        <button type="submit" class="btn btn-success m-3">Save Changes</button>
+        
+    </div>
+          
+    </form>
+</div>
+    
+<div class="aa__row container-md mt-3">
+    <a class="btn btn-info" href="{% url "aa_client_read" id %}">Back</a>
+</div>
+
+<div class="aa__row">
+    <div class="card text-bg-dark m-3 text-center">
+        <div class="card-header">
+            <h4 class="h_text">Delete Client</h4>
+        </div>
+        <div class="card-body">
+            <p class="text-danger">Click below to go to client deletion page.</p>
+            <a href="{% url "aa_client_delete" id %}" class="btn btn-warning">GO</a>
+        </div>
+    </div>
+</div>
 {% endblock content %}

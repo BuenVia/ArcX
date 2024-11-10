@@ -2,42 +2,68 @@
 
 {% block content %}
 
- <h1>{{ user_profile.business_name }}</h1>
 
-    <div class="aa_client_read">
-            <!-- Contact Details Card -->
-            <div class=" m-3">
-                <div class="card-header text-uppercase fw-bold">
-                    Contact Details
+<div class="aa__row">
+    
+    <div class="container-md">
+        <div class="card text-bg-dark m-3">
+            <div class="card-header text-uppercase fw-bold">
+                <h1 class="h_text">{{ user_profile.business_name }}</h1>
+                
                 </div>
                 <div class="card-body">
-                    <p>{{ user_profile.business_name }}</p>
-                    <p>{{ user_profile.address_one }}</p>
-                    <p>{{ user_profile.address_two }}</p>
-                    <p>{{ user_profile.town }}</p>
-                    <p>{{ user_profile.county }}</p>
-                    <p>{{ user_profile.postcode }}</p>
-                    <p>Tel: {{ user_profile.telephone }}</p>
-                    <p>Email: {{ user.email }}</p>
-                </div>
-            </div>
-
-            <!-- Personal Details Card -->
-            <div class="card text-bg-dark m-3">
-                <div class="card-header text-uppercase fw-bold">
-                    Personal Details
-                </div>
-                <div class="card-body">
+                    
                     <p class="mb-2"><strong>First Name:</strong> {{ user.first_name }}</p>
                     <p class="mb-2"><strong>Last Name:</strong> {{ user.last_name }}</p>
                     <p class="mb-2"><strong>Username:</strong> {{ user.username }}</p>
-                    <p class="mb-2"><strong>Date Joined:</strong> {{ user.date_joined }}</p>
                     <p class="mb-2"><strong>Last Login:</strong> {{ user.last_login }}</p>
+                    <p class="mb-2"><strong>ArcX Creation Date:</strong> {{ user.date_joined }}</p>
+                    <h3 class="h_text">Contact</h3>
+                    <p class="m-0">{{ user_profile.business_name }}</p>
+                    <p class="m-0">{{ user_profile.address_one }}</p>
+                    <p class="m-0">{{ user_profile.address_two }}</p>
+                    <p class="m-0">{{ user_profile.town }}</p>
+                    <p class="m-0">{{ user_profile.county }}</p>
+                    <p class="m-0">{{ user_profile.postcode }}</p>
+                    <p class="mt-2">Tel: {{ user_profile.telephone }}</p>
+                    <p>Email: {{ user.email }}</p>
+                </div>
+                <div class="card-footer">
+                    <a class="btn btn-warning" href="{% url "aa_client_update" user.id %}">Edit</a>
                 </div>
             </div>
-    </div>
+        </div>
+        <div class="container-md">
+            <div class="card text-bg-dark m-3">
+                <div class="card-header">
+                    <h3 class="h_text">Staff</h3></div>
+                <div class="card-body"></div>
+                <div class="card-footer">
+                    <a href="" class="btn btn-info">Go</a>
+                </div>
+            </div>
+            <div class="card text-bg-dark m-3">
+                <div class="card-header">
+                    <h3 class="h_text">
+                        Equipment    
+                    </h3>
+                </div>
+                <div class="card-body"></div>
+                <div class="card-footer">
+                    <a href="" class="btn btn-info">Go</a>
+                </div>
+            </div>
+            <div class="card text-bg-dark m-3">
+                <div class="card-header">
+                    <h3 class="h_text">Documentation</h3></div>
+                <div class="card-body"></div>
+                <div class="card-footer">
+                    <a href="" class="btn btn-info">Go</a>
+                </div>
+            </div>
+        </div>
 
-<a class="btn btn-warning" href="{% url "aa_client_update" user.id %}">Edit</a>
+     </div>
 
 
 {% endblock content %}

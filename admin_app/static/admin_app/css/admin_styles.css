@@ -36,9 +36,26 @@ body {
     align-items: center;
 }
 
-.aa_client_read {
+.aa__row {
     display: flex;
     flex-direction: row;
     justify-content: center;
     
+}
+
+.h_text {
+    color: rgb(255, 255, 0);
+}
+
+.client__edit p {
+    display: flex;
+    flex-direction: column;
+}
+
+.client__edit input {
+    padding: .25em;
+    border-radius: 5px;
+    border: none;
+    background-color: #555;
+    color: #ddd;
 }
