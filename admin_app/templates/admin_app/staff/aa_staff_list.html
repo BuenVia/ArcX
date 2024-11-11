@@ -1,0 +1,36 @@
+<!-- staff_qualifications_by_role.html -->
+{% extends 'admin_app/base.html' %}
+{% load custom_filters %}
+
+{% block content %}
+
+<div class="container mt-5">
+    <h2>Staff Members and Their Roles</h2>
+    <table class="table table-bordered table-dark">
+        <thead>
+            <tr>
+                <th>Staff Name</th>
+                <th>Staff ID</th>
+                <th>Roles</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for staff in staff_with_roles %}
+                <tr>
+                    <td><a href="">{{ staff.first_name }} {{ staff.last_name }}</a></td>
+                    <td>{{ staff.staff_id }}</td>
+                    <td>
+                        {% for staff_role in staff.staffrole_set.all %}
+                            {{ staff_role.role.role_name }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a class="btn btn-info" href="{% url "aa_staff_create" user %}">Add</a>
+</div>
+
+
+
+{% endblock %}

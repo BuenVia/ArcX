@@ -49,7 +49,7 @@ def aa_dashboard(request):
 def aa_clients_list(request):
     if request.user.is_superuser:
         users = User.objects.all()
-        return render(request, 'admin_app/clients/aa_clients.html', { "users": users })  # Render dashboard page for superuser
+        return render(request, 'admin_app/clients/aa_clients_list.html', { "users": users })  # Render dashboard page for superuser
     return redirect('')  # If the user is not a superuser, redirect to home
 
 @login_required
@@ -75,7 +75,7 @@ def aa_client_create(request):
                 profile.user = user
                 profile.save()
 
-                return redirect('aa_clients')  # Redirect after successful user creation
+                return redirect('aa_clients_list')  # Redirect after successful user creation
         else:
             user_form = AddUserForm()
             profile_form = UserProfileForm()
@@ -153,7 +153,7 @@ def aa_client_delete(request, id):
         if request.method == "POST":
             if request.POST.get('name') == user.username:
                 user.delete()
-                return redirect('aa_clients')
+                return redirect('aa_clients_list')
             else:
                 return redirect('aa_client_update', id=user.id)
                 
@@ -161,7 +161,103 @@ def aa_client_delete(request, id):
         return render(request, 'admin_app/clients/aa_client_delete.html', context)
     return redirect('')  # If the user is not a superuser, redirect to home
 
+# STAFF
+@login_required
+def aa_staff_list(request, id):
+    # Fetch all roles
+    # roles = RoleNames.objects.all()
+    
+    # data = {}
+    
+    # for role in roles:
+    #     # Get qualifications for this role
+    #     qualifications = Qualifications.objects.filter(role=role)
+        
+    #     # Get all staff for this role and their qualifications
+    #     staff_roles = StaffRole.objects.filter(role=role, staff__user_id=id)
+        
+    #     staff_data = []
+        
+    #     for staff_role in staff_roles:
+    #         # Get qualifications for this specific staff member
+    #         staff_qualifications = StaffQualification.objects.filter(staff=staff_role.staff, qualification__in=qualifications)
+            
+    #         # Structure staff qualification data for this role
+    #         qualification_data = {q.qualification_name: None for q in qualifications}  # initialize with None
+    #         for sq in staff_qualifications:
+    #             qualification_data[sq.qualification.qualification_name] = sq.qualification_date
+            
+    #         staff_data.append({
+    #             "staff_name": f"{staff_role.staff.first_name} {staff_role.staff.last_name}",
+    #             "staff_id": staff_role.staff.id,
+    #             "qualifications": qualification_data
+    #         })
 
+        
+    #     # Prepare the role data for the template
+    #     data[role.role_name] = {
+    #         "qualifications": [q.qualification_name for q in qualifications],
+    #         "staff_data": staff_data
+    #     }
+    #     print(staff_data)
+
+    # context = {
+    #     'data': data,
+    #     'user': id
+    # }
+    # context = {'roles_data': roles_data, 'today': today}
+
+    # Fetch all staff and their roles associated with the specified user
+    staff_with_roles = Staff.objects.filter(user_id=id).prefetch_related('staffrole_set__role')
+
+    context = {
+        'staff_with_roles': staff_with_roles,
+        'user': id
+    }
+
+    return render(request, 'admin_app/staff/aa_staff_list.html', context)
+
+@login_required
+def aa_staff_create(request, id):
+    # Get the User object based on the user_id
+    user = get_object_or_404(User, id=id)
+
+    if request.method == 'POST':
+        staff_form = StaffForm(request.POST)
+        role_form = StaffRoleForm(request.POST)
+
+        if staff_form.is_valid() and role_form.is_valid():
+            # Save the Staff instance with the user association
+            staff = staff_form.save(commit=False)
+            staff.user = user  # Associate with the passed user_id
+            staff.save()
+
+            # Save the StaffRole instance and link it to the staff
+            staff_role = role_form.save(commit=False)
+            staff_role.staff = staff
+            staff_role.save()
+
+            return redirect('aa_staff_list', id)  # Redirect to a list of staff or a success page
+
+    else:
+        staff_form = StaffForm()
+        role_form = StaffRoleForm()
+
+    context = {
+        'staff_form': staff_form,
+        'role_form': role_form,
+        'user': user,  # Pass user information to the template if needed
+    }
+    return render(request, 'admin_app/staff/aa_staff_create.html', context)
+
+def aa_staff_read(request):
+    pass
+
+def aa_staff_update(request):
+    pass
+
+def aa_staff_delete(request):
+    pass
 
 
 
@@ -323,149 +419,104 @@ def admin_client_equipment(request, id):
     return render(request, 'admin_app/equipment/aa_equipment.html', context=context)
 
 # Competenecy
-@login_required
-def admin_competency(request, id):
-    # Fetch all roles
-    roles = RoleNames.objects.all()
-    
-    data = {}
-    
-    for role in roles:
-        # Get qualifications for this role
-        qualifications = Qualifications.objects.filter(role=role)
-        
-        # Get all staff for this role and their qualifications
-        staff_roles = StaffRole.objects.filter(role=role, staff__user_id=id)
-        
-        staff_data = []
-        
-        for staff_role in staff_roles:
-            # Get qualifications for this specific staff member
-            staff_qualifications = StaffQualification.objects.filter(staff=staff_role.staff, qualification__in=qualifications)
-            
-            # Structure staff qualification data for this role
-            qualification_data = {q.qualification_name: None for q in qualifications}  # initialize with None
-            for sq in staff_qualifications:
-                qualification_data[sq.qualification.qualification_name] = sq.qualification_date
-            
-            staff_data.append({
-                "staff_name": f"{staff_role.staff.first_name} {staff_role.staff.last_name}",
-                "staff_id": staff_role.staff.id,
-                "qualifications": qualification_data
-            })
 
-        
-        # Prepare the role data for the template
-        data[role.role_name] = {
-            "qualifications": [q.qualification_name for q in qualifications],
-            "staff_data": staff_data
-        }
-        print(staff_data)
 
-    context = {
-        'data': data,
-        'user': id
-    }
-    print(context)
-    # context = {'roles_data': roles_data, 'today': today}
-    return render(request, 'admin_app/competency/aa_competency.html', context)
+# @login_required
+# def aa_staff_competency_read(request, id):
+#     staff = Staff.objects.filter(id=id).first()
+#     staff_qualification = StaffQualification.objects.filter(staff=id)
+#     staff_role = StaffRole.objects.filter(staff=id).first()
+#     context = {
+#         "staff": staff,
+#         "staff_qualification": staff_qualification,
+#         "staff_role": staff_role
+#     }
+#     print(context)
+#     return render(request, 'admin_app/staff/apetency_staff.html', context=context)
 
-@login_required
-def admin_competency_staff(request, id):
-    staff = Staff.objects.filter(id=id).first()
-    staff_qualification = StaffQualification.objects.filter(staff=id)
-    staff_role = StaffRole.objects.filter(staff=id).first()
-    context = {
-        "staff": staff,
-        "staff_qualification": staff_qualification,
-        "staff_role": staff_role
-    }
-    print(context)
-    return render(request, 'admin_app/competency/aa_competency_staff.html', context=context)
+# @login_required
+# def aa_staff_competency_create(request, user_id):
+#     user = get_object_or_404(User, id=user_id)  # Fetch the User based on the passed user_id
+#     StaffQualificationFormSet = modelformset_factory(
+#         StaffQualification,
+#         form=StaffQualificationForm,
+#         extra=1,  # Adjust extra forms as needed
+#     )
+#     if request.method == 'POST':
+#         staff_form = StaffForm(request.POST)
+#         role_form = StaffRoleForm(request.POST)
+#         qualification_formset = StaffQualificationFormSet(request.POST, prefix='qualification')
 
-@login_required
-def admin_competency_staff_add(request, user_id):
-    user = get_object_or_404(User, id=user_id)  # Fetch the User based on the passed user_id
-    StaffQualificationFormSet = modelformset_factory(
-        StaffQualification,
-        form=StaffQualificationForm,
-        extra=1,  # Adjust extra forms as needed
-    )
-    if request.method == 'POST':
-        staff_form = StaffForm(request.POST)
-        role_form = StaffRoleForm(request.POST)
-        qualification_formset = StaffQualificationFormSet(request.POST, prefix='qualification')
+#         if all([staff_form.is_valid(), role_form.is_valid(), qualification_formset.is_valid()]):
+#             staff = staff_form.save(commit=False)
+#             staff.user = user
+#             staff.save()
 
-        if all([staff_form.is_valid(), role_form.is_valid(), qualification_formset.is_valid()]):
-            staff = staff_form.save(commit=False)
-            staff.user = user
-            staff.save()
+#             role = role_form.save(commit=False)
+#             role.staff = staff
+#             role.save()
 
-            role = role_form.save(commit=False)
-            role.staff = staff
-            role.save()
+#             for qualification_form in qualification_formset:
+#                 qualification = qualification_form.save(commit=False)
+#                 qualification.staff = staff
+#                 qualification.save()
 
-            for qualification_form in qualification_formset:
-                qualification = qualification_form.save(commit=False)
-                qualification.staff = staff
-                qualification.save()
+#             return redirect('staff_list')  # Redirect to a relevant page
+#     else:
+#         staff_form = StaffForm()
+#         role_form = StaffRoleForm()
+#         qualification_formset = StaffQualificationFormSet(prefix='qualification')
 
-            return redirect('staff_list')  # Redirect to a relevant page
-    else:
-        staff_form = StaffForm()
-        role_form = StaffRoleForm()
-        qualification_formset = StaffQualificationFormSet(prefix='qualification')
+#     context = {
+#         'staff_form': staff_form,
+#         'role_form': role_form,
+#         'qualification_formset': qualification_formset,
+#         'user': user,
+#     }
+#     return render(request, 'admin_app/competency/aa_competency_staff_add_edit.html', context=context)
 
-    context = {
-        'staff_form': staff_form,
-        'role_form': role_form,
-        'qualification_formset': qualification_formset,
-        'user': user,
-    }
-    return render(request, 'admin_app/competency/aa_competency_staff_add_edit.html', context=context)
+# @login_required
+# def add_or_edit_staff(request, user_id, staff_id=None):
+#     user = get_object_or_404(User, id=user_id)
+#     StaffRoleFormSet = modelformset_factory(StaffRole, form=StaffRoleForm, extra=1, can_delete=True)
+#     StaffQualificationFormSet = modelformset_factory(StaffQualification, form=StaffQualificationForm, extra=1, can_delete=True)
 
-@login_required
-def add_or_edit_staff(request, user_id, staff_id=None):
-    user = get_object_or_404(User, id=user_id)
-    StaffRoleFormSet = modelformset_factory(StaffRole, form=StaffRoleForm, extra=1, can_delete=True)
-    StaffQualificationFormSet = modelformset_factory(StaffQualification, form=StaffQualificationForm, extra=1, can_delete=True)
+#     if staff_id:
+#         staff = get_object_or_404(Staff, id=staff_id, user=user)
+#         staff_form = StaffForm(request.POST or None, instance=staff)
+#         role_formset = StaffRoleFormSet(request.POST or None, queryset=staff.staffrole_set.all())
+#         qualification_formset = StaffQualificationFormSet(request.POST or None, queryset=staff.staffqualification_set.all())
+#     else:
+#         staff_form = StaffForm(request.POST or None)
+#         role_formset = StaffRoleFormSet(request.POST or None, queryset=StaffRole.objects.none())
+#         qualification_formset = StaffQualificationFormSet(request.POST or None, queryset=StaffQualification.objects.none())
 
-    if staff_id:
-        staff = get_object_or_404(Staff, id=staff_id, user=user)
-        staff_form = StaffForm(request.POST or None, instance=staff)
-        role_formset = StaffRoleFormSet(request.POST or None, queryset=staff.staffrole_set.all())
-        qualification_formset = StaffQualificationFormSet(request.POST or None, queryset=staff.staffqualification_set.all())
-    else:
-        staff_form = StaffForm(request.POST or None)
-        role_formset = StaffRoleFormSet(request.POST or None, queryset=StaffRole.objects.none())
-        qualification_formset = StaffQualificationFormSet(request.POST or None, queryset=StaffQualification.objects.none())
+#     if request.method == 'POST':
+#         if staff_form.is_valid() and role_formset.is_valid() and qualification_formset.is_valid():
+#             # Save staff
+#             new_staff = staff_form.save(commit=False)
+#             new_staff.user = user
+#             new_staff.save()
 
-    if request.method == 'POST':
-        if staff_form.is_valid() and role_formset.is_valid() and qualification_formset.is_valid():
-            # Save staff
-            new_staff = staff_form.save(commit=False)
-            new_staff.user = user
-            new_staff.save()
+#             # Save roles
+#             for form in role_formset:
+#                 role = form.save(commit=False)
+#                 role.staff = new_staff
+#                 role.save()
+#                 form.save_m2m()
 
-            # Save roles
-            for form in role_formset:
-                role = form.save(commit=False)
-                role.staff = new_staff
-                role.save()
-                form.save_m2m()
+#             # Save qualifications
+#             for form in qualification_formset:
+#                 qualification = form.save(commit=False)
+#                 qualification.staff = new_staff
+#                 qualification.save()
+#                 form.save_m2m()
 
-            # Save qualifications
-            for form in qualification_formset:
-                qualification = form.save(commit=False)
-                qualification.staff = new_staff
-                qualification.save()
-                form.save_m2m()
+#             return redirect('success_page')  # Change to appropriate redirect
 
-            return redirect('success_page')  # Change to appropriate redirect
-
-    context = {
-        'staff_form': staff_form,
-        'role_formset': role_formset,
-        'qualification_formset': qualification_formset,
-    }
-    return render(request, 'admin_app/competency/aa_competency_staff_add_edit.html', context=context)
+#     context = {
+#         'staff_form': staff_form,
+#         'role_formset': role_formset,
+#         'qualification_formset': qualification_formset,
+#     }
+#     return render(request, 'admin_app/competency/aa_competency_staff_add_edit.html', context=context)

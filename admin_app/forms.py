@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from .models import Equipment, Staff, StaffRole, StaffQualification, UserProfile
+from .models import Equipment, Staff, StaffRole, RoleNames, StaffQualification, UserProfile
 from django.forms import inlineformset_factory
 
 
@@ -62,9 +62,15 @@ class EquipmentForm(forms.ModelForm):
 class StaffForm(forms.ModelForm):
     class Meta:
         model = Staff
-        fields = ['first_name', 'last_name', 'staff_id', 'user']
+        fields = ['first_name', 'last_name', 'staff_id']
 
 class StaffRoleForm(forms.ModelForm):
+    role = forms.ModelChoiceField(
+        queryset=RoleNames.objects.all(),
+        empty_label="Select Role",
+        widget=forms.Select
+    )
+
     class Meta:
         model = StaffRole
         fields = ['role']
