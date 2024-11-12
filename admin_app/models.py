@@ -86,7 +86,7 @@ class StaffRole(models.Model):
         db_table = "staff_role"
 
     def __str__(self):
-        return f"{self.staff} {self.role}"
+        return f"{self.staff.first_name} {self.staff.last_name} - {self.role.role_name}"
     
 class StaffQualification(models.Model):
     staff = models.ForeignKey(Staff, on_delete=models.CASCADE)

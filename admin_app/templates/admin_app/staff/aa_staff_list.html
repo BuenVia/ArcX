@@ -17,7 +17,7 @@
         <tbody>
             {% for staff in staff_with_roles %}
                 <tr>
-                    <td><a href="">{{ staff.first_name }} {{ staff.last_name }}</a></td>
+                    <td><a href="{% url 'aa_staff_read' user_id=user staff_id=staff.id %}">{{ staff.first_name }} {{ staff.last_name }}</a></td>
                     <td>{{ staff.staff_id }}</td>
                     <td>
                         {% for staff_role in staff.staffrole_set.all %}

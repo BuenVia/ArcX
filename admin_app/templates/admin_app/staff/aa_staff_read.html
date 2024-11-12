@@ -8,16 +8,13 @@
     </div>
     <img src="{% static 'images/img_avatar.png' %}" class="card-img-top" style="height: 300px; width: 100%;" alt="ARC">
     <div class="card-body">
-        <p>Role: {{ staff_role.role.role_name }}</p>
+        <p>Role: {{ staff_role.role }}</p>
         <p>Qualifications:</p>
-        {% for qualification in staff_qualification %}
-            <p>{{ qualification.qualification }}</p>
-            <p>{{ qualification.qualification_date }}</p>
-        {% endfor %}
+        
     </div>
     <div class="card-footer"><a href="">Edit</a></div>
 </div>
 
-<a href="{% url 'admin_competency' staff.user_id %}" class="btn btn-info">Back</a>
+
 
 {% endblock %}

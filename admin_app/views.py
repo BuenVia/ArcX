@@ -90,18 +90,18 @@ def aa_client_create(request):
         )
 
 @login_required
-def aa_client_read(request, id):
+def aa_client_read(request, user_id):
     if request.user.is_superuser:
-        user = User.objects.filter(id=id).first()
-        user_profile = UserProfile.objects.filter(user_id=id).first()
+        user = User.objects.filter(id=user_id).first()
+        user_profile = UserProfile.objects.filter(user_id=user_id).first()
         context = {'user': user, 'user_profile': user_profile}
         return render(request, 'admin_app/clients/aa_client_read.html', context)
     return redirect('')  # If the user is not a superuser, redirect to home
 
 @login_required
-def aa_client_update(request, id):
+def aa_client_update(request, user_id):
     if request.user.is_superuser:
-        user = get_object_or_404(User, id=id)
+        user = get_object_or_404(User, id=user_id)
         profile = get_object_or_404(UserProfile, user=user)
 
         if request.method == 'POST':
@@ -111,7 +111,7 @@ def aa_client_update(request, id):
             if user_form.is_valid() and profile_form.is_valid():
                 user_form.save()
                 profile_form.save()
-                return redirect('aa_client_read', id=id)  # Redirect to a success page or user dashboard
+                return redirect('aa_client_read', id=user_id)  # Redirect to a success page or user dashboard
         else:
             user_form = UserForm(instance=user)
             profile_form = UserProfileForm(instance=profile)
@@ -119,13 +119,13 @@ def aa_client_update(request, id):
         context = {
             'user_form': user_form,
             'profile_form': profile_form,
-            'id': id
+            'id': user_id
         }
         return render(request, 'admin_app/clients/aa_client_update.html', context)
     return redirect('')  # If the user is not a superuser, redirect to home
 
 @login_required
-def aa_client_update_pw(request, id):
+def aa_client_update_pw(request, user_id):
     if request.user.is_superuser:
         if request.method == 'POST':
             form = UserRegistrationForm(request.POST)
@@ -147,9 +147,9 @@ def aa_client_update_pw(request, id):
     return redirect('')  # If the user is not a superuser, redirect to home
 
 @login_required
-def aa_client_delete(request, id):
+def aa_client_delete(request, user_id):
     if request.user.is_superuser:
-        user = User.objects.filter(id=id).first()
+        user = User.objects.filter(id=user_id).first()
         if request.method == "POST":
             if request.POST.get('name') == user.username:
                 user.delete()
@@ -163,7 +163,7 @@ def aa_client_delete(request, id):
 
 # STAFF
 @login_required
-def aa_staff_list(request, id):
+def aa_staff_list(request, user_id):
     # Fetch all roles
     # roles = RoleNames.objects.all()
     
@@ -208,19 +208,19 @@ def aa_staff_list(request, id):
     # context = {'roles_data': roles_data, 'today': today}
 
     # Fetch all staff and their roles associated with the specified user
-    staff_with_roles = Staff.objects.filter(user_id=id).prefetch_related('staffrole_set__role')
+    staff_with_roles = Staff.objects.filter(user_id=user_id).prefetch_related('staffrole_set__role')
 
     context = {
         'staff_with_roles': staff_with_roles,
-        'user': id
+        'user': user_id
     }
 
     return render(request, 'admin_app/staff/aa_staff_list.html', context)
 
 @login_required
-def aa_staff_create(request, id):
+def aa_staff_create(request, user_id):
     # Get the User object based on the user_id
-    user = get_object_or_404(User, id=id)
+    user = get_object_or_404(User, id=user_id)
 
     if request.method == 'POST':
         staff_form = StaffForm(request.POST)
@@ -237,7 +237,7 @@ def aa_staff_create(request, id):
             staff_role.staff = staff
             staff_role.save()
 
-            return redirect('aa_staff_list', id)  # Redirect to a list of staff or a success page
+            return redirect('aa_staff_list', user_id)  # Redirect to a list of staff or a success page
 
     else:
         staff_form = StaffForm()
@@ -250,8 +250,16 @@ def aa_staff_create(request, id):
     }
     return render(request, 'admin_app/staff/aa_staff_create.html', context)
 
-def aa_staff_read(request):
-    pass
+def aa_staff_read(request, user_id, staff_id):
+    staff = Staff.objects.filter(id=staff_id).first()
+    staff_role = StaffRole.objects.filter(staff=staff).first()
+    ### QAULIFICATION STUFF
+    context = {
+        'staff': staff,
+        'staff_role': staff_role
+    }
+    print(context)
+    return render(request, 'admin_app/staff/aa_staff_read.html', context)
 
 def aa_staff_update(request):
     pass
