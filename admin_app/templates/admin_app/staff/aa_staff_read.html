@@ -2,19 +2,31 @@
 {% load static %}
 {% block content %}
 
-<div class="card text-bg-dark" style="width: 300px;">
-    <div class="card-header">
-        <p>{{ staff.first_name }} {{ staff.last_name }} - {{ staff.staff_id }}</p>
-    </div>
-    <img src="{% static 'images/img_avatar.png' %}" class="card-img-top" style="height: 300px; width: 100%;" alt="ARC">
-    <div class="card-body">
-        <p>Role: {{ staff_role.role }}</p>
-        <p>Qualifications:</p>
-        
-    </div>
-    <div class="card-footer"><a href="">Edit</a></div>
-</div>
+<div class="container-md">
 
+    
+    <div class="card text-bg-dark" style="width: 300px;">
+    
+        <div class="card-header">
+            <h4 class="h_text">{{ staff.first_name }} {{ staff.last_name }} - {{ staff.staff_id }}</h4>
+        </div>
+    
+        <img src="{% static 'images/img_avatar.png' %}" class="card-img-top" style="height: 300px; width: 100%;" alt="ARC">
+    
+        <div class="card-body">
+            <p>Role: {{ staff_role.role }}</p>
+            <p>Qualifications:</p>
+            
+        </div>
+    
+        <div class="card-footer">
+            <a href="">Edit</a>
+        </div>
+    </div>
+
+    <a href="{% url "aa_staff_list" user %}" class="btn btn-info">Back</a>
+
+</div>
 
 
 {% endblock %}

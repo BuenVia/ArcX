@@ -256,7 +256,8 @@ def aa_staff_read(request, user_id, staff_id):
     ### QAULIFICATION STUFF
     context = {
         'staff': staff,
-        'staff_role': staff_role
+        'staff_role': staff_role,
+        'user': user_id
     }
     print(context)
     return render(request, 'admin_app/staff/aa_staff_read.html', context)
