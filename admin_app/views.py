@@ -252,21 +252,52 @@ def aa_staff_create(request, user_id):
 
 def aa_staff_read(request, user_id, staff_id):
     staff = Staff.objects.filter(id=staff_id).first()
-    staff_role = StaffRole.objects.filter(staff=staff).first()
+    staff_role = StaffRole.objects.filter(staff=staff).all()
     ### QAULIFICATION STUFF
     context = {
         'staff': staff,
         'staff_role': staff_role,
         'user': user_id
     }
-    print(context)
+    print(staff_role)
     return render(request, 'admin_app/staff/aa_staff_read.html', context)
 
-def aa_staff_update(request):
-    pass
+def aa_staff_update(request, user_id, staff_id):
+    staff = Staff.objects.filter(id=staff_id).first()
+    staff_role = StaffRole.objects.filter(staff=staff).first()
+    context = {
+        'staff': staff,
+        'staff_role': staff_role,
+        'user': user_id
+    }
+    return render(request, 'admin_app/staff/aa_staff_update.html', context)
 
 def aa_staff_delete(request):
     pass
+
+@login_required
+def aa_staff_role_create(request, staff_id):
+    staff = get_object_or_404(Staff, id=staff_id)
+
+    if request.method == 'POST':
+        form = StaffRoleForm(request.POST)
+        if form.is_valid():
+            staff_role = form.save(commit=False)
+            staff_role.staff = staff
+            staff_role.save()
+            return redirect('staff_roles_list', staff_id=staff_id)  # Redirect to a page listing all roles for this staff member
+    else:
+        form = StaffRoleForm()
+
+    # If you want to display existing roles, you can query them:
+    existing_roles = StaffRole.objects.filter(staff=staff)
+
+    return render(request, 'admin_app/staff/aa_staff_role_create.html', {
+        'form': form,
+        'staff': staff,
+        'existing_roles': existing_roles,
+    })
+
 
 
 

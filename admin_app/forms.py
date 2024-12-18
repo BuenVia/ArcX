@@ -87,3 +87,14 @@ StaffRoleFormSet = inlineformset_factory(
 StaffQualificationFormSet = inlineformset_factory(
     Staff, StaffQualification, form=StaffQualificationForm, extra=1, can_delete=True
 )
+
+class StaffRoleForm(forms.ModelForm):
+    role = forms.ModelChoiceField(
+        queryset=RoleNames.objects.all(),
+        widget=forms.Select,
+        label="Select Role"
+    )
+
+    class Meta:
+        model = StaffRole
+        fields = ['role']

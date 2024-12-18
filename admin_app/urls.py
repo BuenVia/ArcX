@@ -16,6 +16,9 @@ urlpatterns = [
     path('staff/<int:user_id>/', views.aa_staff_list, name='aa_staff_list'),
     path('staff/<int:user_id>/create/', views.aa_staff_create, name='aa_staff_create'),
     path('staff/<int:user_id>/read/<int:staff_id>/', views.aa_staff_read, name='aa_staff_read'),
+    path('staff/<int:user_id>/update/<int:staff_id>/', views.aa_staff_update, name='aa_staff_update'),
+    path('staff/<int:staff_id>/role/create/', views.aa_staff_role_create, name='aa_staff_role_create'),
+
     # path('staff/competency/<int:id>/', views.aa_staff_competency_read, name='aa_staff_competency'),
     # path('staff/competency/create/<int:user_id>', views.add_or_edit_staff, name='aa_staff_competency_create'),
     # path('staff/competency/update/<int:user_id>/<int:staff_id>/', views.add_or_edit_staff, name='aa_staff_comptency_update'),

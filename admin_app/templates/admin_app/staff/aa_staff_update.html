@@ -14,19 +14,20 @@
         <img src="{% static 'images/img_avatar.png' %}" class="card-img-top" style="height: 300px; width: 100%;" alt="ARC">
     
         <div class="card-body">
-            <p>Role(s): 
-            {% for role in staff_role %}
-                {{ role.role }}
-            {% endfor %}
-            </p>
-            <p><a href="{% url "aa_staff_role_create" staff.id %}">Add Role</a></p>
+
+            <input type="text" value="{{ staff.first_name }}" />
+            <input type="text" value="{{ staff.last_name }}" />
+            <input type="text" value="{{ staff.staff_id }}" />
+            <input type="text" value="{{ staff_role.role }}" />
+
+            
+
             <p>Qualifications:</p>
-            <p><a href="">Add Qualification</a></p>
             
         </div>
     
         <div class="card-footer">
-            <a href="{% url "aa_staff_update" user_id=user staff_id=staff.id %}">Edit</a>
+            <a href="">Edit</a>
         </div>
     </div>
 
